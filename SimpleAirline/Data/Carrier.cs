@@ -7,7 +7,7 @@ namespace SimpleAirline.Data
     {
         public Carrier()
         {
-           // Tariffs = new List<Tariff>();
+            Tariffs = new List<Tariff>();
         }
         public int Id { get; set; }
         public string Name { get; set; }

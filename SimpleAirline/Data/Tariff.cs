@@ -10,7 +10,9 @@ namespace SimpleAirline.Data
     public class Tariff
     {
         public int Id { get; set; }
+        [InverseProperty("FromTariffs")]
         public Place From { get; set; }
+        [InverseProperty("ToTariffs")]
         public Place To { get; set; }
         public char SeatClass { get; set; }
         public double PriceUsd { get; set; }

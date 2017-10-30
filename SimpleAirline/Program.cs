@@ -16,6 +16,7 @@ namespace SimpleAirline
             {
                 // получаем объекты из бд и выводим на консоль
                 Console.WriteLine("Список объектов:");
+                
                 foreach (Carrier carrier in context.Carriers.Include("Tariffs"))
                 {
                     Console.WriteLine(carrier);
