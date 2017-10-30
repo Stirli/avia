@@ -12,7 +12,7 @@ namespace SimpleAirline.Data
         public int Id { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
-        public virtual ICollection<Tariff> Tariffs { get; set; }
+        public ICollection<Tariff> Tariffs { get; set; }
 
         public override string ToString()
         {
