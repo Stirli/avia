@@ -5,11 +5,17 @@ namespace SimpleAirline.Data
 {
     public class Place
     {
-        public int Id { get; set; }
+        [Key]
+        public int PlaceId { get; set; }
         public string Name { get; set; }
         public override string ToString()
         {
             return Name;
+        }
+
+        public static implicit operator string(Place p)
+        {
+            return p.Name;
         }
     }
 }
