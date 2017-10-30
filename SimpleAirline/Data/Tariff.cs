@@ -10,16 +10,16 @@ namespace SimpleAirline.Data
     public class Tariff
     {
         public int Id { get; set; }
-        [InverseProperty("FromTariffs")]
-        public Place From { get; set; }
-        [InverseProperty("ToTariffs")]
-        public Place To { get; set; }
-        public char SeatClass { get; set; }
+        public int? FromPlaceId { get; set; }
+        public int? ToPlaceId { get; set; }
+        public virtual Place FromPlace { get; set; }
+        public virtual Place ToPlace { get; set; }
+        public string SeatClass { get; set; }
         public double PriceUsd { get; set; }
         public virtual Carrier Carrier { get; set; }
         public override string ToString()
         {
-            return String.Format("ID: {0}; Перевозчик: {5}; От {1}, До: {2}; Класс: {3}; Цена: {4}$" , Id, From, To, SeatClass, PriceUsd, Carrier);
+            return String.Format("ID: {0}; Перевозчик: {5}; От {1}, До: {2}; Класс: {3}; Цена: {4}$" , Id, FromPlace, ToPlace, SeatClass, PriceUsd, Carrier);
         }
     }
 }

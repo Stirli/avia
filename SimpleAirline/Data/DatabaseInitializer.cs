@@ -30,8 +30,8 @@ namespace SimpleAirline.Data
             context.SaveChanges();
 
             // создаем два объекта Tariff
-            Tariff tariff1 = new Tariff {From = minsk, To = moscow, SeatClass = 'Y', PriceUsd = 149, Carrier = b2 };
-            Tariff tariff2 = new Tariff { From = moscow, To = london, SeatClass = 'P', PriceUsd = 799, Carrier = afl };
+            Tariff tariff1 = new Tariff {FromPlace = minsk, ToPlace = moscow, SeatClass = "Y", PriceUsd = 149, Carrier = b2 };
+            Tariff tariff2 = new Tariff { FromPlace = moscow, ToPlace = london, SeatClass = "P", PriceUsd = 799, Carrier = afl };
             context.Tariffs.AddRange(new List<Tariff> { tariff1, tariff2 });
 
             context.SaveChanges();

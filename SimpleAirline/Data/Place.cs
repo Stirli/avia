@@ -8,13 +8,9 @@ namespace SimpleAirline.Data
     {
         public Place()
         {
-            FromTariffs = new List<Tariff>();
-            ToTariffs = new List<Tariff>();
         }
         public int PlaceId { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<Tariff> FromTariffs { get; set; }
-        public virtual ICollection<Tariff> ToTariffs { get; set; }
         public override string ToString()
         {
             return Name;

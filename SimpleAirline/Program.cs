@@ -16,14 +16,15 @@ namespace SimpleAirline
             {
                 // получаем объекты из бд и выводим на консоль
                 Console.WriteLine("Список объектов:");
-                
-                foreach (Carrier carrier in context.Carriers.Include("Tariffs"))
+
+                foreach (Carrier carrier in context.Carriers.AsQueryable().Where(carrier => carrier.Tariffs.Any(tariff => tariff.PriceUsd < 200)).ToList())
                 {
                     Console.WriteLine(carrier);
                     foreach (var tariff in carrier.Tariffs)
                     {
                         Console.WriteLine(tariff);
                     }
+                    Console.WriteLine();
                 }
             }
             Console.ReadKey(true);
