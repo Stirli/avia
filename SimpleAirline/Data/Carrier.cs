@@ -3,12 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SimpleAirline.Data
 {
-    public class Carrier
+    public class Carrier : IModel
     {
-        public Carrier()
-        {
-            Tariffs = new List<Tariff>();
-        }
         public int Id { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }

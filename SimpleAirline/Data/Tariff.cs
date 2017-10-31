@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SimpleAirline.Data
 {
-    public class Tariff
+    public class Tariff : IModel
     {
         public int Id { get; set; }
         public int? FromPlaceId { get; set; }
@@ -19,7 +19,7 @@ namespace SimpleAirline.Data
         public virtual Carrier Carrier { get; set; }
         public override string ToString()
         {
-            return String.Format("ID: {0}; Перевозчик: {5}; От {1}, До: {2}; Класс: {3}; Цена: {4}$" , Id, FromPlace, ToPlace, SeatClass, PriceUsd, Carrier);
+            return String.Format("Перевозчик: {5}; От {1}, До: {2}; Класс: {3}; Цена: {4}$" , Id, FromPlace, ToPlace, SeatClass, PriceUsd, Carrier);
         }
     }
 }

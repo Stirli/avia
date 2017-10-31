@@ -4,12 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SimpleAirline.Data
 {
-    public class Place
+    public class Place : IModel
     {
-        public Place()
-        {
-        }
-        public int PlaceId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public override string ToString()
         {
