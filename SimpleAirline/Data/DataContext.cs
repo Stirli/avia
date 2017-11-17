@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SimpleAirline.Data
 {
-    class DataContext : DbContext
+    class DataContext
     {
-        public DataContext()
-            : base("DbConnection")
-        {
-            Database.SetInitializer(new DatabaseInitializer());
-        }
+        public List<Carrier> Carriers { get; private set; }
+        private List<Place> _places;
 
-        public DbSet<Place> Places { get; set; }
-        public DbSet<Carrier> Carriers { get; set; }
-        public DbSet<Tariff> Tariffs { get; set; }
+        public List<Passanger> Passangers { get; set; }
+
+        // Тарифы можно получить только через перевозчиков, так как именно они занимаются ценообразованием
+        public IEnumerable<Tariff> Tariffs
+        {
+            get
+            {
+                List<Tariff> list = new List<Tariff>();
+                foreach (Carrier carrier in Carriers)
+                    foreach (Tariff tariff in carrier.Tariffs)
+                        list.Add(tariff);
+                return list;
+            }
+        }
     }
 }

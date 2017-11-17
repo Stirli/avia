@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SimpleAirline.Data
 {
-    public class Carrier : IModel
+    public class Carrier
     {
         public int Id { get; set; }
         public string Name { get; set; }

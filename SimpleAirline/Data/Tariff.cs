@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SimpleAirline.Data
 {
-    public class Tariff : IModel
+    public class Tariff
     {
         public int Id { get; set; }
-        public int? FromPlaceId { get; set; }
-        public int? ToPlaceId { get; set; }
-        public virtual Place FromPlace { get; set; }
-        public virtual Place ToPlace { get; set; }
+        public Flight Flight { get; set; }
         public string SeatClass { get; set; }
         public double PriceUsd { get; set; }
         public virtual Carrier Carrier { get; set; }
