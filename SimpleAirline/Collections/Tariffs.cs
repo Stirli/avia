@@ -7,7 +7,7 @@ namespace SimpleAirline
     public class Tariffs
     {
         private readonly DataLoader _loader;
-
+        private int lastId = 
         public Tariffs(DataLoader loader)
         {
             _loader = loader;

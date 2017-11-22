@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using SimpleAirline;
 
 namespace SimpleAirline
 {
@@ -195,7 +194,7 @@ namespace SimpleAirline
                                     {
                                         Console.WriteLine(airport.Sum(ReadString("Введите номер паспорта пассажира")));
                                     }
-                                    catch (NullReferenceException e)
+                                    catch (NullReferenceException)
                                     {
                                         Console.WriteLine("Пассажир не неайден");
                                     }

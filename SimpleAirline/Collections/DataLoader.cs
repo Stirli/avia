@@ -9,8 +9,9 @@ namespace SimpleAirline
 {
     public class DataLoader
     {
-        private const string TariffsTxt = "tariffs.txt";
-        private const string PassangersTxt = "passangers.txt";
+        private const string TariffsTxt = "Tariffs.txt";
+        private const string PassangersTxt = "Passangers.txt";
+        private const string TicketsTxt = "Tickets.txt";
         public ICollection<Tariff> Tariffs { get; private set; }
         public ICollection<Passanger> Passangers { get; private set; }
 
@@ -36,7 +37,16 @@ namespace SimpleAirline
                 IEnumerable<string> lines2 = File.ReadLines(PassangersTxt);
                 foreach (string line in lines2)
                 {
-                    Passangers.Add(ParsePassanger(line));
+                    Passanger passanger = (Passanger)line;
+                    Passangers.Add(passanger);
+
+                    IEnumerable<string> linest = File.ReadLines(TicketsTxt);
+                    foreach (string linet  in linest)
+                    {
+                       string[] linetArr = linet.Split(';');
+                        passanger.Tickets.Add(new Ticket(Tariffs.First(tariff=>tariff.Id== linetArr[0]));
+                        
+                    }
                 }
             }
             catch (Exception e)
@@ -45,28 +55,27 @@ namespace SimpleAirline
             }
         }
 
-
-        // Парсит строку в пассажира
-        private Passanger ParsePassanger(string s)
-        {
-            string[] strings = s.Split(';');
-            /*
-               Преобразование строки в Discount выполнено через оператор внутри класса Discount, а не при помощи метода
-               так как Discount - очень простая структура данных логически и физически
-             */
-            return new Passanger(strings[0], strings[1], (Discount)strings[2]);
-        }
-
         public void Save()
         {
-            List<string> tariffsList = new List<string>();
+            StreamWriter swta = new StreamWriter(TariffsTxt);
             foreach (Tariff tariff in Tariffs)
-                tariffsList.Add((string)tariff);
-            File.WriteAllLines(TariffsTxt, tariffsList);
-            List<string> list = new List<string>();
-            foreach (var pass in Tariffs)
-                list.Add(pass.ToString());
-            File.WriteAllLines(PassangersTxt, list);
+            {
+                swta.WriteLine((string)tariff);
+            }
+            swta.Close();
+
+            StreamWriter swp = new StreamWriter(PassangersTxt);
+            StreamWriter swti = new StreamWriter(TicketsTxt);
+            foreach (Passanger pass in Passangers)
+            {
+                swp.WriteLine((string)pass);
+                foreach (Ticket ticket in pass.Tickets)
+                {
+                    swti.WriteLine(ticket);
+                }
+            }
+            swp.Close();
+            swti.Close();
         }
     }
 }

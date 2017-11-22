@@ -40,11 +40,10 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataLoaderException.cs" />
+    <Compile Include="Collections\DataLoaderException.cs" />
     <Compile Include="Collections\Airport.cs" />
     <Compile Include="Collections\Passangers.cs" />
     <Compile Include="Collections\Tariffs.cs" />
