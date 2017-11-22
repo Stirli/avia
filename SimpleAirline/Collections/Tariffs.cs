@@ -6,20 +6,20 @@ namespace SimpleAirline
 {
     public class Tariffs
     {
-        private readonly DataProvider _provider;
+        private readonly DataLoader _loader;
 
-        public Tariffs(DataProvider provider)
+        public Tariffs(DataLoader loader)
         {
-            _provider = provider;
+            _loader = loader;
         }
         public void Create(Tariff entity)
         {
-            _provider.Tariffs.Add(entity);
+            _loader.Tariffs.Add(entity);
         }
 
         public IEnumerable<Tariff> GetAll()
         {
-            return _provider.Tariffs;
+            return _loader.Tariffs;
         }
     }
 }

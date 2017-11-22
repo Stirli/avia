@@ -7,14 +7,31 @@ namespace SimpleAirline
 {
     class Airport
     {
-        private DataProvider _db;
+        private DataLoader _db;
         public Airport()
         {
-            _db = new DataProvider();
+            _db = new DataLoader();
             Passangers = new Passangers(_db);
             Tariffs = new Tariffs(_db);
         }
         public Passangers Passangers { get; private set; }
         public Tariffs Tariffs { get; private set; }
+
+        public void Save()
+        {
+            _db.Save();
+        }
+
+        public double Sum()
+        {
+            double sum = 0;
+            foreach (var passanger in Passangers.GetAll())
+                sum += passanger.TicketsPrice;
+            return sum;
+        }
+        public double Sum(string id)
+        {
+            return Passangers[id].TicketsPrice;
+        }
     }
 }

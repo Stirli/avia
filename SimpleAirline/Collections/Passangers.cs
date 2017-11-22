@@ -8,21 +8,33 @@ namespace SimpleAirline
 {
     class Passangers
     {
-        private readonly DataProvider _provider;
+        private readonly DataLoader _loader;
 
-        public Passangers(DataProvider provider)
+        public Passangers(DataLoader loader)
         {
-            _provider = provider;
+            _loader = loader;
         }
 
         public void Create(Passanger passanger)
         {
-            _provider.Passangers.Add(passanger);
+            _loader.Passangers.Add(passanger);
         }
 
         public IEnumerable<Passanger> GetAll()
         {
-            return _provider.Passangers;
+            return _loader.Passangers;
+        }
+
+        public Passanger this[string index]
+        {
+            get
+            {
+                foreach (var passanger in _loader.Passangers)
+                {
+                    if (passanger.Passport.Equals(index)) return passanger;
+                }
+                return null;
+            }
         }
     }
 }

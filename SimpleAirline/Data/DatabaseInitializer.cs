@@ -8,7 +8,7 @@ namespace SimpleAirline
 {
     class DatabaseInitializer
     {
-        //protected  void Seed(DataProvider context)
+        //protected  void Seed(DataLoader context)
         //{
         //    var b2 = new Carrier { Passanger = "Belavia - Belarusian Airlines", ShortName = "B2" };
         //    var afl = new Carrier { Passanger = "Aeroflot Russian Airlines", ShortName = "AFL" };

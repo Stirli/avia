@@ -99,7 +99,7 @@ namespace SimpleAirline
         static Tariff ReadTariff()
         {
             Console.WriteLine("Ввод данных о тарифе");
-            return new Tariff(ReadString("Из"), ReadString("В"), ReadDate() , ReadInt("Цена", 0));
+            return new Tariff(ReadString("Из"), ReadString("В"), ReadDate(), ReadInt("Цена", 0));
         }
         static Discount ReadDiscount()
         {
@@ -146,10 +146,11 @@ namespace SimpleAirline
         static void Main(string[] args)
         {
 
+            Airport airport;
             try
             {
                 // Создаем пустой каталог
-                Airport airport = new Airport();
+                airport = new Airport();
 
                 while (true)
                 {
@@ -168,6 +169,7 @@ namespace SimpleAirline
                             case ADD_TARIFF:
                                 {
                                     airport.Tariffs.Create(ReadTariff());
+                                    airport.Save();
                                 }
                                 break;
                             case REG_TICKET:
@@ -177,32 +179,43 @@ namespace SimpleAirline
                                     Tariff tariff = SelectItem(airport.Tariffs.GetAll(), "Выберите тариф").Clone();
                                     passanger.Tickets.Add(new Ticket(tariff, passanger, ReadInt("Место", 1, 800)));
                                     airport.Passangers.Create(passanger);
+                                    airport.Save();
                                 }
                                 break;
                             case PRICE_ALL:
                                 {
                                     Console.WriteLine(PRICE_ALL);
-                                    double sum = 0;
-                                    foreach (var passanger in airport.Passangers.GetAll())
-                                        sum += passanger.TicketsPrice;
-                                    Console.WriteLine(sum);
+                                    Console.WriteLine(airport.Sum());
                                 }
                                 break;
                             case PRICE_OF_PGER:
                                 {
-
+                                    Console.WriteLine(PRICE_OF_PGER);
+                                    try
+                                    {
+                                        Console.WriteLine(airport.Sum(ReadString("Введите номер паспорта пассажира")));
+                                    }
+                                    catch (NullReferenceException e)
+                                    {
+                                        Console.WriteLine("Пассажир не неайден");
+                                    }
                                 }
                                 break;
                         }
 
-                        Console.WriteLine("Нажмите любую клавишу");
-                        Console.ReadKey(true);
                     }
                     catch (ApplicationException e)
                     {
                         Console.WriteLine(e.Message);
                     }
+                    Console.WriteLine("Нажмите любую клавишу");
+                    Console.ReadKey(true);
                 }
+
+            }
+            catch (DataLoaderException e)
+            {
+                Console.WriteLine(e.Message, e);
             }
             catch (ApplicationException e)
             {
