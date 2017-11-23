@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SimpleAirline
@@ -23,12 +24,12 @@ namespace SimpleAirline
 
         public override string ToString()
         {
-            return Name;
+            return string.Format("{0}. Номер паспорта: {1}. Скидка: {2}", Name, Passport, Discount);
         }
 
         public override int GetHashCode()
         {
-            return (Passport != null ? Passport.GetHashCode() : 0);
+            return Passport != null ? Passport.GetHashCode() : 0;
         }
 
         protected bool Equals(Passanger other)

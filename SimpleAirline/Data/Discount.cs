@@ -51,5 +51,11 @@ namespace SimpleAirline
         // скидка задана в процентах, другие имеют фиксированную скидку.
         public double Value { get; set; }
         public DiscountType DiscountType { get; set; }
+
+    }
+    public enum DiscountType
+    {
+        Static,
+        Procent
     }
 }

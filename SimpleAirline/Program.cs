@@ -19,6 +19,7 @@ namespace SimpleAirline
         private const string PRICE_OF_PGER = "Cтоимость купленных пассажиром билетов";
         private const string PRICE_ALL = "Cтоимость всех купленных билетов";
         private const string SAVE = "Сохранить данные на диск";
+        private const string LIST_PASSANGER = "Список пассажиров";
 
         private static int ReadInt(string message = "Введите число", int min = int.MinValue, int max = int.MaxValue)
         {
@@ -30,6 +31,41 @@ namespace SimpleAirline
                     Console.WriteLine(" Или Ctrl+Z для отмены");
                     string readLine = Console.ReadLine();
                     int readInt = int.Parse(readLine);
+                    if (readInt < min || readInt > max)
+                    {
+                        throw new OverflowException();
+                    }
+
+                    return readInt;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Введенная строка не является целым числом.\n Попробуйте еще раз");
+                }
+                catch (ArgumentNullException)
+                {
+                    // если ввести ctr+z, а потом enter, то Console.ReadLine вернет null
+                    throw new ApplicationException("Ввод был отменен");
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine("Число слшком большое или слишком маленькое");
+                    Console.WriteLine("Допустимые значения: {0} - {1}", min, max);
+                    Console.WriteLine("Попробуйте еще раз");
+                }
+            }
+        }
+
+        private static double ReadDouble(string message = "Введите число", double min = double.MinValue, double max = double.MaxValue)
+        {
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine(message);
+                    Console.WriteLine(" Или Ctrl+Z для отмены");
+                    string readLine = Console.ReadLine();
+                    double readInt = double.Parse(readLine);
                     if (readInt < min || readInt > max)
                     {
                         throw new OverflowException();
@@ -104,24 +140,20 @@ namespace SimpleAirline
         static Tariff ReadTariff()
         {
             Console.WriteLine("Ввод данных о тарифе");
-            return new Tariff(ReadString("Из"), ReadString("В"), ReadDate(), ReadInt("Цена", 0));
+            return new Tariff(ReadString("Из"), ReadString("В"), ReadDate(), ReadDouble("Цена", 0));
         }
         static Discount ReadDiscount()
         {
             while (true)
             {
-                Regex reg = new Regex(@"^(?<type>-)?(?<value>\d+)(?<type>%)?$");
-                Match match = reg.Match(ReadString("Скидка (Статическа -50 или Процентная 50%"));
-
-                DiscountType discountType;
-                if (match.Groups["type"].Value.Equals("-")) discountType = DiscountType.Static;
-                else if (match.Groups["type"].Value.Equals("%")) discountType = DiscountType.Procent;
-                else
+                try
                 {
-                    Console.WriteLine("Неверный тип скидки");
-                    continue;
+                    return (Discount)ReadString("Введите скидку (-10 или 10%");
                 }
-                return new Discount(double.Parse(match.Groups["value"].Value), discountType);
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
         }
         static Passanger ReadPassanger()
@@ -172,6 +204,7 @@ namespace SimpleAirline
                         ADD_TARIFF,
                         TARIFF_LIST,
                         REG_PASSANGER,
+                        LIST_PASSANGER,
                        REG_TICKET,
                         PRICE_ALL,
                         PRICE_OF_PGER,
@@ -199,48 +232,30 @@ namespace SimpleAirline
                                     airport.Passangers.Create(passanger);
                                 }
                                 break;
+                            case LIST_PASSANGER:
+                                {
+                                    Print(airport.Passangers.GetAll());
+                                }
+                                break;
                             case REG_TICKET:
                                 {
-                                    string passport = ReadString("Введите номер пасспорта");
-                                    Passanger passanger = airport.Passangers.Get(passport);
-                                    if (passanger == null)
-                                    {
-                                        Console.WriteLine("Пассажир не найден");
-                                        break;
-                                    }
-
-                                    Console.WriteLine(passanger.ToString());
-
-                                    ICollection<Ticket> tickets = airport.Passangers.GetTickets(passport);
-                                    Tariff tariff = SelectItem(airport.Tariffs.GetAll(), "Выберите тариф");
-                                    int seatNo = ReadInt("Посадочное место");
-
-                                    tickets.Add(new Ticket(passanger, tariff, seatNo));
+                                    RegTicket(airport);
                                 }
                                 break;
                             case PRICE_ALL:
                                 {
-                                    Console.WriteLine(PRICE_ALL);
-                                    Console.WriteLine(airport.Sum());
+                                    ShowPrice(airport);
                                 }
                                 break;
                             case PRICE_OF_PGER:
                                 {
-                                    Console.WriteLine(PRICE_OF_PGER);
-                                    try
-                                    {
-                                        string passport = ReadString("Введите номер паспорта пассажира");
-                                        Print(airport.Passangers.GetTickets(passport));
-                                        Console.WriteLine(airport.Sum(passport));
-                                    }
-                                    catch (Exception)
-                                    {
-                                        Console.WriteLine("Пассажир не неайден");
-                                    }
+                                    ShowPassangerPrice(airport);
                                 }
                                 break;
                             case SAVE:
-                                airport.Save();
+                                {
+                                    airport.Save();
+                                }
                                 break;
                         }
                     }
@@ -268,6 +283,64 @@ namespace SimpleAirline
 
             Console.WriteLine("Нажмите любую клавишу");
             Console.ReadKey(true);
+        }
+
+        private static void RegTicket(Airport airport)
+        {
+            string passport = ReadString("Введите номер пасспорта");
+            Passanger passanger = airport.Passangers.Get(passport);
+            if (passanger == null)
+            {
+                Console.WriteLine("Пассажир не найден");
+                return;
+            }
+
+            Console.WriteLine(passanger.ToString());
+
+            ICollection<Ticket> tickets = airport.Passangers.GetTickets(passport);
+            Tariff tariff = SelectItem(airport.Tariffs.GetAll(), "Выберите тариф");
+            int seatNo = ReadInt("Посадочное место");
+
+            tickets.Add(new Ticket(passanger, tariff, seatNo));
+        }
+
+        private static void ShowPrice(Airport airport)
+        {
+            Console.WriteLine(PRICE_ALL);
+            double sum = airport.Sum();
+            if (double.IsInfinity(sum))
+            {
+                Console.WriteLine(
+                    "Результат вычесления слишком большой. Обратитесь в службу поддержки.");
+            }
+            else
+            {
+                Console.WriteLine(sum);
+            }
+        }
+
+        private static void ShowPassangerPrice(Airport airport)
+        {
+            Console.WriteLine(PRICE_OF_PGER);
+            try
+            {
+                string passport = ReadString("Введите номер паспорта пассажира");
+                Print(airport.Passangers.GetTickets(passport));
+                double sum = airport.Sum(passport);
+                if (double.IsInfinity(sum))
+                {
+                    Console.WriteLine(
+                        "Результат вычесления слишком большой. Обратитесь в службу поддержки.");
+                }
+                else
+                {
+                    Console.WriteLine(sum);
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Пассажир не неайден");
+            }
         }
     }
 }

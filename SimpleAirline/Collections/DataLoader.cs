@@ -63,8 +63,8 @@ namespace SimpleAirline
                             PassangersTickets.Add(passanger.Passport, ticketList = new List<Ticket>());
                         }
 
-                        Tariff tariff = new Tariff(arr[3], arr[4], DateTime.Parse(arr[5]), double.Parse(arr[6]));
-                        int seatNo = int.Parse(arr[7]);
+                        Tariff tariff = new Tariff(arr[3], arr[4], DateTime.Parse(arr[5]), double.Parse(arr[7]));
+                        int seatNo = int.Parse(arr[6]);
                         ticketList.Add(new Ticket(passanger, tariff, seatNo));
                     }
                 }
