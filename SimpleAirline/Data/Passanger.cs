@@ -13,10 +13,10 @@ namespace SimpleAirline
             Tickets = new List<Ticket>();
         }
 
-        public string Passport { get; private set; }
-        public string Name { get; private set; }
-        public Discount Discount { get; private set; }
-        public ICollection<Ticket> Tickets { get; private set; }
+        public string Passport { get; set; }
+        public string Name { get; set; }
+        public Discount Discount { get; set; }
+        public IEnumerable<Ticket> Tickets { get; set; }
 
         // Парсит строку в пассажира
         public static explicit operator Passanger(string s)

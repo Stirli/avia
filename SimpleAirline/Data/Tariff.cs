@@ -17,20 +17,30 @@ namespace SimpleAirline
             Price = price;
         }
 
-        public int Id { get; set; }
+        public string Id { get; set; }
+
         public string From { get; set; }
+
         public string Destination { get; set; }
+
         public DateTime Date { get; set; }
+
         public double Price { get; set; }
+
         public static Tariff operator +(Tariff tariff, double delta)
         {
+            if (tariff.Price + delta < 0)
+            {
+                throw new ArgumentOutOfRangeException("Сумма приведет к опусканию цены ниже нуля");
+            }
+
             tariff.Price += delta;
             return tariff;
         }
 
         public Tariff Clone()
         {
-            return new Tariff(From, Destination, Date, Price);
+            return new Tariff(From, Destination, Date, Price){Id = Id};
         }
 
         public override string ToString()
@@ -38,15 +48,15 @@ namespace SimpleAirline
             return String.Format("От {1}, До: {2}; Дата: {4} Цена: {3}$", Id, From, Destination, Price, Date);
         }
 
-
         public static explicit operator Tariff(string s)
         {
             string[] strings = s.Split(';');
-            return new Tariff(strings[0], strings[1], DateTime.Parse(strings[2]), double.Parse(strings[3]));
+            return new Tariff(strings[1], strings[2], DateTime.Parse(strings[3]), double.Parse(strings[4])) { Id = strings[0] };
         }
+
         public static explicit operator string(Tariff s)
         {
-            return s.From + ";" + s.Destination + ";" + s.Date.ToString(CultureInfo.InstalledUICulture) +";"+s.Price;
+            return s.Id + ";" + s.From + ";" + s.Destination + ";" + s.Date.ToString(CultureInfo.InstalledUICulture) + ";" + s.Price;
         }
     }
 }

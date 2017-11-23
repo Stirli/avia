@@ -5,14 +5,20 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+// TODO ВАЖНО Если возникнет вопрос: Почему у всех классов данных открытые (public, а не private) setтеры? 
+// Ответ: при помощи такой коллекции, как ObservableCollection и интерфейса INotifyPropertyChanged можно отслеживать изменения в модели
+// На уровне DataLoader, и разрешать/запрещать изменения в зависимости от прав доступа
 namespace SimpleAirline
 {
     class Program
     {
+        private const string REG_PASSANGER = "Зарегестрировать пассажира";
         private const string ADD_TARIFF = "Добавить тариф";
-        private const string REG_TICKET = "Регистрировать покупку билета";
+        private const string REG_TICKET = "Регестрировать покупку билета";
         private const string PRICE_OF_PGER = "Cтоимость купленных пассажиром билетов";
         private const string PRICE_ALL = "Cтоимость всех купленных билетов";
+        private const string TARIFF_LIST = "Список тарифов";
+        private const string SAVE = "Сохранить данные на диск";
 
         private static int ReadInt(string message = "Введите число", int min = int.MinValue, int max = int.MaxValue)
         {
@@ -157,9 +163,12 @@ namespace SimpleAirline
                     string select = SelectItem(new[]
                 {
                         ADD_TARIFF,
+                        TARIFF_LIST,
+                        REG_PASSANGER,
                        REG_TICKET,
                         PRICE_ALL,
                         PRICE_OF_PGER,
+                        SAVE
                     }, "Главное меню");
                     try
                     {
@@ -168,17 +177,26 @@ namespace SimpleAirline
                             case ADD_TARIFF:
                                 {
                                     airport.Tariffs.Create(ReadTariff());
-                                    airport.Save();
+                                }
+                                break;
+                            case TARIFF_LIST:
+                                {
+                                    Console.WriteLine(TARIFF_LIST);
+                                    Print(airport.Tariffs.GetAll());
+                                }
+                                break;
+                            case REG_PASSANGER:
+                                {
+                                    Passanger passanger = ReadPassanger();
+                                    airport.Passangers.Create(passanger);
                                 }
                                 break;
                             case REG_TICKET:
                                 {
-                                    Passanger passanger = ReadPassanger();
                                     // Clone() - создает новый объект с теми же данными. Изменения в тарифах не должны влиять на информацию в билете.
                                     Tariff tariff = SelectItem(airport.Tariffs.GetAll(), "Выберите тариф").Clone();
-                                    passanger.Tickets.Add(new Ticket(tariff, passanger, ReadInt("Место", 1, 800)));
-                                    airport.Passangers.Create(passanger);
-                                    airport.Save();
+                                    airport.RegTicket(ReadString("Введите номер паспорта"), tariff,
+                                        ReadInt("Номер места", 1, 800));
                                 }
                                 break;
                             case PRICE_ALL:
@@ -199,6 +217,9 @@ namespace SimpleAirline
                                         Console.WriteLine("Пассажир не неайден");
                                     }
                                 }
+                                break;
+                            case SAVE:
+                                airport.Save();
                                 break;
                         }
 

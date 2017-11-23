@@ -43,10 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\DataLoaderException.cs" />
     <Compile Include="Collections\Airport.cs" />
     <Compile Include="Collections\Passangers.cs" />
     <Compile Include="Collections\Tariffs.cs" />
+    <Compile Include="Collections\DataLoaderException.cs" />
     <Compile Include="Data\DatabaseInitializer.cs" />
     <Compile Include="Collections\DataLoader.cs" />
     <Compile Include="Data\DiscountType.cs" />

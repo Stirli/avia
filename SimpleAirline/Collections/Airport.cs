@@ -14,6 +14,7 @@ namespace SimpleAirline
             Passangers = new Passangers(_db);
             Tariffs = new Tariffs(_db);
         }
+
         public Passangers Passangers { get; private set; }
         public Tariffs Tariffs { get; private set; }
 
@@ -29,9 +30,15 @@ namespace SimpleAirline
                 sum += passanger.TicketsPrice;
             return sum;
         }
+
         public double Sum(string id)
         {
             return Passangers[id].TicketsPrice;
+        }
+
+        public void RegTicket(string passport, Tariff tariff, int seat)
+        {
+            throw new NotImplementedException();
         }
     }
 }

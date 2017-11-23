@@ -11,7 +11,6 @@ namespace SimpleAirline
     {
         private const string TariffsTxt = "Tariffs.txt";
         private const string PassangersTxt = "Passangers.txt";
-        private const string TicketsTxt = "Tickets.txt";
         public ICollection<Tariff> Tariffs { get; private set; }
         public ICollection<Passanger> Passangers { get; private set; }
 
@@ -40,13 +39,18 @@ namespace SimpleAirline
                     Passanger passanger = (Passanger)line;
                     Passangers.Add(passanger);
 
-                    IEnumerable<string> linest = File.ReadLines(TicketsTxt);
-                    foreach (string linet  in linest)
+                    if (!File.Exists(passanger.Passport + ".txt"))
                     {
-                       string[] linetArr = linet.Split(';');
-                        passanger.Tickets.Add(new Ticket(Tariffs.First(tariff=>tariff.Id== linetArr[0]));
-                        
+                        continue;
                     }
+                    List<Ticket> tickets = new List<Ticket>();
+                    IEnumerable<string> linest = File.ReadLines(passanger.Passport + ".txt");
+                    foreach (string linet in linest)
+                    {
+                        string[] linetArr = linet.Split(';');
+                        tickets.Add(new Ticket(Tariffs.First(tariff => tariff.Id == linetArr[0]), passanger, int.Parse(linetArr[2]), double.Parse(linetArr[3])));
+                    }
+                    passanger.Tickets = tickets;
                 }
             }
             catch (Exception e)
@@ -57,25 +61,28 @@ namespace SimpleAirline
 
         public void Save()
         {
-            StreamWriter swta = new StreamWriter(TariffsTxt);
+            StreamWriter tariffsSw = new StreamWriter(TariffsTxt);
             foreach (Tariff tariff in Tariffs)
             {
-                swta.WriteLine((string)tariff);
+                tariffsSw.WriteLine((string)tariff);
             }
-            swta.Close();
 
-            StreamWriter swp = new StreamWriter(PassangersTxt);
-            StreamWriter swti = new StreamWriter(TicketsTxt);
+            tariffsSw.Close();
+
+            StreamWriter passangersSw = new StreamWriter(PassangersTxt);
             foreach (Passanger pass in Passangers)
             {
-                swp.WriteLine((string)pass);
+                passangersSw.WriteLine((string)pass);
+                StreamWriter ticketsSw = new StreamWriter(pass.Passport + ".txt");
                 foreach (Ticket ticket in pass.Tickets)
                 {
-                    swti.WriteLine(ticket);
+                    ticketsSw.WriteLine((string)ticket);
                 }
+
+                ticketsSw.Close();
             }
-            swp.Close();
-            swti.Close();
+
+            passangersSw.Close();
         }
     }
 }

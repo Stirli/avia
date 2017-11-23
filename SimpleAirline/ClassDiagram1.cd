@@ -3,28 +3,28 @@
   <Class Name="SimpleAirline.Passanger">
     <Position X="6.5" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAQAAAAAAAAAAAAAABAAAAQAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <HashCode>BAQAAAAAAgAAAAAAABQAAAQAAAAAAAAAAgAAAAAAAAA=</HashCode>
       <FileName>Data\Passanger.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SimpleAirline.Ticket">
     <Position X="4.75" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACwAAAAQEAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACwAAAAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Data\Ticket.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SimpleAirline.Tariff">
     <Position X="3" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgACAAAAAQAAAAAEQAAAAAAAAAAAAAAFAAAAAAAAABA=</HashCode>
+      <HashCode>AgACAAAAAQAAAAAEQAQAAAAAAAAAAAAFBAAAAAAAABA=</HashCode>
       <FileName>Data\Tariff.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SimpleAirline.Discount">
     <Position X="10.25" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <HashCode>AAAAIQAAAAAAAAAAAAAAAAAAAAAAIAAAAAAgAAAAAAA=</HashCode>
       <FileName>Data\Discount.cs</FileName>
     </TypeIdentifier>
   </Class>
