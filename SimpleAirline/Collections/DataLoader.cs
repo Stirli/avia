@@ -10,52 +10,68 @@ namespace SimpleAirline
     public class DataLoader
     {
         private const string TariffsTxt = "Tariffs.txt";
+        private const string PassangersTicketsTxt = "PassangersTickets.txt";
         private const string PassangersTxt = "Passangers.txt";
         public ICollection<Tariff> Tariffs { get; private set; }
-        public ICollection<Passanger> Passangers { get; private set; }
+        public IDictionary<string, List<Ticket>> PassangersTickets { get; set; }
+        public IDictionary<string, Passanger> Passangers { get; set; }
 
         public DataLoader()
         {
             Tariffs = new HashSet<Tariff>();
-            Passangers = new HashSet<Passanger>();
+            PassangersTickets = new Dictionary<string, List<Ticket>>();
+            Passangers = new Dictionary<string, Passanger>();
+            string entityName = "Tariffs";
             try
             {
-                IEnumerable<string> lines = File.ReadLines(TariffsTxt);
-                foreach (string line in lines)
+                if (File.Exists(TariffsTxt))
                 {
-                    Tariffs.Add((Tariff)line);
+                    IEnumerable<string> lines = File.ReadLines(TariffsTxt);
+                    foreach (string line in lines)
+                    {
+                        Tariffs.Add((Tariff)line);
+                    }
+                }
+
+                entityName = "Passangers";
+                if (File.Exists(PassangersTxt))
+                {
+                    IEnumerable<string> lines = File.ReadLines(PassangersTxt);
+                    foreach (string line in lines)
+                    {
+                        Passanger passanger = (Passanger)line;
+                        Passangers.Add(passanger.Passport, passanger);
+                    }
+                }
+
+                entityName = "PassangersTickets";
+                if (File.Exists(PassangersTicketsTxt))
+                {
+                    IEnumerable<string> lines2 = File.ReadLines(PassangersTicketsTxt);
+                    foreach (string line in lines2)
+                    {
+                        string[] arr = line.Split(';');
+                        Passanger passanger =
+                            new Passanger() { Passport = arr[0], Name = arr[1], Discount = (Discount)arr[2] };
+                        List<Ticket> ticketList;
+                        if (PassangersTickets.ContainsKey(passanger.Passport))
+                        {
+                            ticketList = PassangersTickets[passanger.Passport];
+                        }
+                        else
+                        {
+                            PassangersTickets.Add(passanger.Passport, ticketList = new List<Ticket>());
+                        }
+
+                        Tariff tariff = new Tariff(arr[3], arr[4], DateTime.Parse(arr[5]), double.Parse(arr[6]));
+                        int seatNo = int.Parse(arr[7]);
+                        ticketList.Add(new Ticket(passanger, tariff, seatNo));
+                    }
                 }
             }
             catch (Exception e)
             {
-                throw new DataLoaderException("Tariff", e);
-            }
-
-            try
-            {
-                IEnumerable<string> lines2 = File.ReadLines(PassangersTxt);
-                foreach (string line in lines2)
-                {
-                    Passanger passanger = (Passanger)line;
-                    Passangers.Add(passanger);
-
-                    if (!File.Exists(passanger.Passport + ".txt"))
-                    {
-                        continue;
-                    }
-                    List<Ticket> tickets = new List<Ticket>();
-                    IEnumerable<string> linest = File.ReadLines(passanger.Passport + ".txt");
-                    foreach (string linet in linest)
-                    {
-                        string[] linetArr = linet.Split(';');
-                        tickets.Add(new Ticket(Tariffs.First(tariff => tariff.Id == linetArr[0]), passanger, int.Parse(linetArr[2]), double.Parse(linetArr[3])));
-                    }
-                    passanger.Tickets = tickets;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new DataLoaderException("Passanger", e);
+                throw new DataLoaderException(entityName, e);
             }
         }
 
@@ -68,21 +84,22 @@ namespace SimpleAirline
             }
 
             tariffsSw.Close();
-
             StreamWriter passangersSw = new StreamWriter(PassangersTxt);
-            foreach (Passanger pass in Passangers)
+            foreach (Passanger passanger in Passangers.Values)
             {
-                passangersSw.WriteLine((string)pass);
-                StreamWriter ticketsSw = new StreamWriter(pass.Passport + ".txt");
-                foreach (Ticket ticket in pass.Tickets)
+                passangersSw.WriteLine((string)passanger);
+            }
+            passangersSw.Close();
+            StreamWriter passangersTicketsSw = new StreamWriter(PassangersTicketsTxt);
+            foreach (List<Ticket> tickets in PassangersTickets.Values)
+            {
+                foreach (Ticket ticket in tickets)
                 {
-                    ticketsSw.WriteLine((string)ticket);
+                    passangersTicketsSw.WriteLine((string)ticket);
                 }
-
-                ticketsSw.Close();
             }
 
-            passangersSw.Close();
+            passangersTicketsSw.Close();
         }
     }
 }

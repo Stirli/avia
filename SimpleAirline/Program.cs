@@ -12,12 +12,12 @@ namespace SimpleAirline
 {
     class Program
     {
-        private const string REG_PASSANGER = "Зарегестрировать пассажира";
         private const string ADD_TARIFF = "Добавить тариф";
-        private const string REG_TICKET = "Регестрировать покупку билета";
+        private const string TARIFF_LIST = "Список тарифов";
+        private const string REG_PASSANGER = "Зарегестрировать пассажира";
+        private const string REG_TICKET = "Регистрировать покупку билета";
         private const string PRICE_OF_PGER = "Cтоимость купленных пассажиром билетов";
         private const string PRICE_ALL = "Cтоимость всех купленных билетов";
-        private const string TARIFF_LIST = "Список тарифов";
         private const string SAVE = "Сохранить данные на диск";
 
         private static int ReadInt(string message = "Введите число", int min = int.MinValue, int max = int.MaxValue)
@@ -91,9 +91,9 @@ namespace SimpleAirline
             }
         }
 
-        private static string ReadString(string v)
+        private static string ReadString(string message)
         {
-            Console.Write(v);
+            Console.Write(message);
             Console.WriteLine(" Или CTRL+Z для отмены");
             string val = Console.ReadLine();
             if (val == null)
@@ -108,17 +108,25 @@ namespace SimpleAirline
         }
         static Discount ReadDiscount()
         {
-            Regex reg = new Regex(@"^(?<type>-)?(?<value>\d+)(?<type>%)?$");
-            Match match = reg.Match(ReadString("Скидка (Статическа -50 или Процентная 50%"));
+            while (true)
+            {
+                Regex reg = new Regex(@"^(?<type>-)?(?<value>\d+)(?<type>%)?$");
+                Match match = reg.Match(ReadString("Скидка (Статическа -50 или Процентная 50%"));
 
-            DiscountType discountType = match.Groups["type"].Value.Equals("-") ? DiscountType.Static :
-                match.Groups["type"].Value.Equals("%") ? DiscountType.Procent
-                : throw new FormatException("Неверный тип скидки");
-            return new Discount(double.Parse(match.Groups["value"].Value), discountType);
+                DiscountType discountType;
+                if (match.Groups["type"].Value.Equals("-")) discountType = DiscountType.Static;
+                else if (match.Groups["type"].Value.Equals("%")) discountType = DiscountType.Procent;
+                else
+                {
+                    Console.WriteLine("Неверный тип скидки");
+                    continue;
+                }
+                return new Discount(double.Parse(match.Groups["value"].Value), discountType);
+            }
         }
         static Passanger ReadPassanger()
         {
-            Passanger passanger = new Passanger(ReadString("Номер пасспорта"), ReadString("ФИО"), ReadDiscount());
+            Passanger passanger = new Passanger() { Passport = ReadString("Номер пасспорта"), Name = ReadString("ФИО"), Discount = ReadDiscount() };
             return passanger;
         }
         static void Print<T>(IEnumerable<T> enumearble)
@@ -127,9 +135,8 @@ namespace SimpleAirline
             foreach (T obj in enumearble)
             {
                 Console.WriteLine(obj);
+                Console.WriteLine("---");
             }
-
-            Console.WriteLine("---");
         }
         // Выводит список на экран, индексируя, и возвращает введенный пользователем индекс
         static T SelectItem<T>(IEnumerable<T> items, string message)
@@ -141,11 +148,11 @@ namespace SimpleAirline
             foreach (T item in enumerable)
             {
                 // Сначала выводим индекс
-                Console.Write("{0,3}: ", i++);
+                Console.Write("{0,3}: ", ++i);
                 // Выводим сам элемент
                 Console.WriteLine(item);
             }
-            return enumerable[ReadInt("Введите индекс:", 0, i)];
+            return enumerable[ReadInt("Введите индекс действия:", 1, i) - 1];
         }
 
         static void Main(string[] args)
@@ -170,6 +177,7 @@ namespace SimpleAirline
                         PRICE_OF_PGER,
                         SAVE
                     }, "Главное меню");
+                    Console.Clear();
                     try
                     {
                         switch (select)
@@ -193,10 +201,21 @@ namespace SimpleAirline
                                 break;
                             case REG_TICKET:
                                 {
-                                    // Clone() - создает новый объект с теми же данными. Изменения в тарифах не должны влиять на информацию в билете.
-                                    Tariff tariff = SelectItem(airport.Tariffs.GetAll(), "Выберите тариф").Clone();
-                                    airport.RegTicket(ReadString("Введите номер паспорта"), tariff,
-                                        ReadInt("Номер места", 1, 800));
+                                    string passport = ReadString("Введите номер пасспорта");
+                                    Passanger passanger = airport.Passangers.Get(passport);
+                                    if (passanger == null)
+                                    {
+                                        Console.WriteLine("Пассажир не найден");
+                                        break;
+                                    }
+
+                                    Console.WriteLine(passanger.ToString());
+
+                                    ICollection<Ticket> tickets = airport.Passangers.GetTickets(passport);
+                                    Tariff tariff = SelectItem(airport.Tariffs.GetAll(), "Выберите тариф");
+                                    int seatNo = ReadInt("Посадочное место");
+
+                                    tickets.Add(new Ticket(passanger, tariff, seatNo));
                                 }
                                 break;
                             case PRICE_ALL:
@@ -210,9 +229,11 @@ namespace SimpleAirline
                                     Console.WriteLine(PRICE_OF_PGER);
                                     try
                                     {
-                                        Console.WriteLine(airport.Sum(ReadString("Введите номер паспорта пассажира")));
+                                        string passport = ReadString("Введите номер паспорта пассажира");
+                                        Print(airport.Passangers.GetTickets(passport));
+                                        Console.WriteLine(airport.Sum(passport));
                                     }
-                                    catch (NullReferenceException)
+                                    catch (Exception)
                                     {
                                         Console.WriteLine("Пассажир не неайден");
                                     }
@@ -222,7 +243,6 @@ namespace SimpleAirline
                                 airport.Save();
                                 break;
                         }
-
                     }
                     catch (ApplicationException e)
                     {
@@ -230,8 +250,8 @@ namespace SimpleAirline
                     }
                     Console.WriteLine("Нажмите любую клавишу");
                     Console.ReadKey(true);
+                    Console.Clear();
                 }
-
             }
             catch (DataLoaderException e)
             {

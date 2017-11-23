@@ -26,19 +26,25 @@ namespace SimpleAirline
         public double Sum()
         {
             double sum = 0;
-            foreach (var passanger in Passangers.GetAll())
-                sum += passanger.TicketsPrice;
+            foreach (List<Ticket> tickets in _db.PassangersTickets.Values)
+            {
+                foreach (Ticket ticket in tickets)
+                {
+                    sum += ticket.DiscountPrice;
+                }
+            }
+
             return sum;
         }
 
-        public double Sum(string id)
+        public double Sum(string passport)
         {
-            return Passangers[id].TicketsPrice;
-        }
-
-        public void RegTicket(string passport, Tariff tariff, int seat)
-        {
-            throw new NotImplementedException();
+            double sum = 0;
+            foreach (var t in _db.PassangersTickets[passport])
+            {
+                sum += t.DiscountPrice;
+            }
+            return sum;
         }
     }
 }

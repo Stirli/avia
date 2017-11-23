@@ -37,12 +37,7 @@ namespace SimpleAirline
             tariff.Price += delta;
             return tariff;
         }
-
-        public Tariff Clone()
-        {
-            return new Tariff(From, Destination, Date, Price){Id = Id};
-        }
-
+        
         public override string ToString()
         {
             return String.Format("От {1}, До: {2}; Дата: {4} Цена: {3}$", Id, From, Destination, Price, Date);

@@ -17,24 +17,38 @@ namespace SimpleAirline
 
         public void Create(Passanger passanger)
         {
-            _loader.Passangers.Add(passanger);
+            if (passanger == null)
+            {
+                throw new ArgumentNullException("passanger");
+            }
+
+            if (_loader.Passangers.ContainsKey(passanger.Passport) ||
+                _loader.PassangersTickets.ContainsKey(passanger.Passport))
+            {
+                throw new ArgumentException("Пассажир уже существует", "passanger");
+            }
+
+            _loader.Passangers.Add(passanger.Passport, passanger);
+            _loader.PassangersTickets.Add(passanger.Passport, new List<Ticket>());
         }
 
+        public Passanger Get(string passport)
+        {
+            if (_loader.Passangers.ContainsKey(passport))
+            {
+                return _loader.Passangers[passport];
+            }
+
+            return null;
+        }
         public IEnumerable<Passanger> GetAll()
         {
-            return _loader.Passangers;
+            return _loader.Passangers.Values;
         }
 
-        public Passanger this[string index]
+        public ICollection<Ticket> GetTickets(string passport)
         {
-            get
-            {
-                foreach (var passanger in _loader.Passangers)
-                {
-                    if (passanger.Passport.Equals(index)) return passanger;
-                }
-                return null;
-            }
+            return _loader.PassangersTickets[passport];
         }
     }
 }

@@ -7,6 +7,15 @@ namespace SimpleAirline
     {
         public Discount(double value, DiscountType discountType)
         {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException("value", value, "Значение скидки не может быть меньше 0");
+            }
+
+            if (discountType == DiscountType.Procent && value > 100)
+            {
+                throw new ArgumentOutOfRangeException("value", value, "Значение скидки не может быть больше 100");
+            }
             Value = value;
             DiscountType = discountType;
         }
@@ -32,6 +41,11 @@ namespace SimpleAirline
                     return "-" + discount.Value;
                 default: throw new InvalidOperationException();
             }
+        }
+
+        public override string ToString()
+        {
+            return this;
         }
 
         // скидка задана в процентах, другие имеют фиксированную скидку.
