@@ -48,7 +48,6 @@
     <Compile Include="Collections\Tariffs.cs" />
     <Compile Include="Collections\DataLoaderException.cs" />
     <Compile Include="Collections\DataLoader.cs" />
-    <Compile Include="Data\Class1.cs" />
     <Compile Include="Data\Tariff.cs" />
     <Compile Include="Data\Passanger.cs" />
     <Compile Include="Data\Discount.cs" />
