@@ -41,12 +41,15 @@ namespace SimpleAirline
 
             return null;
         }
-        public IEnumerable<Passanger> GetAll()
+        public List<Passanger> GetAll()
         {
-            return _loader.Passangers.Values;
+            List<Passanger> list = new List<Passanger>();
+            foreach (var value in _loader.Passangers.Values)
+                list.Add(value);
+            return list;
         }
 
-        public ICollection<Ticket> GetTickets(string passport)
+        public List<Ticket> GetTickets(string passport)
         {
             return _loader.PassangersTickets[passport];
         }

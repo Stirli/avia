@@ -18,7 +18,7 @@ namespace SimpleAirline
             _loader.Tariffs.Add(entity);
         }
 
-        public IEnumerable<Tariff> GetAll()
+        public List<Tariff> GetAll()
         {
             return _loader.Tariffs;
         }

@@ -12,13 +12,13 @@ namespace SimpleAirline
         private const string TariffsTxt = "Tariffs.txt";
         private const string PassangersTicketsTxt = "PassangersTickets.txt";
         private const string PassangersTxt = "Passangers.txt";
-        public ICollection<Tariff> Tariffs { get; private set; }
-        public IDictionary<string, List<Ticket>> PassangersTickets { get; set; }
-        public IDictionary<string, Passanger> Passangers { get; set; }
+        public List<Tariff> Tariffs { get; private set; }
+        public Dictionary<string, List<Ticket>> PassangersTickets { get; set; }
+        public Dictionary<string, Passanger> Passangers { get; set; }
 
         public DataLoader()
         {
-            Tariffs = new HashSet<Tariff>();
+            Tariffs = new List<Tariff>();
             PassangersTickets = new Dictionary<string, List<Ticket>>();
             Passangers = new Dictionary<string, Passanger>();
             string entityName = "Tariffs";
