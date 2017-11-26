@@ -51,6 +51,7 @@
     <Compile Include="Data\Tariff.cs" />
     <Compile Include="Data\Passanger.cs" />
     <Compile Include="Data\Discount.cs" />
+    <Compile Include="Input.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data\Ticket.cs" />
