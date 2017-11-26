@@ -4,45 +4,46 @@ using System.Linq;
 
 namespace SimpleAirline
 {
+    /*
+     * 
+     */
     public class Passanger
     {
         public string Passport { get; set; }
         public string Name { get; set; }
         public Discount Discount { get; set; }
 
-        // Парсит строку в пассажира
-        public static explicit operator Passanger(string s)
+        /*
+         * Парсит строку в пассажира
+         * IndexOutOfRangeException
+         */
+        public static explicit operator Passanger(string str)
         {
-            string[] strings = s.Split(';');
-            return new Passanger(){ Passport = strings[0], Name = strings[1], Discount = (Discount)strings[2] };
+            try
+            {
+                string[] strings = str.Split(';');
+                return new Passanger { Passport = strings[0], Name = strings[1], Discount = (Discount)strings[2] };
+            }
+            catch (Exception e)
+            {
+                throw new FormatException("Строка '"+ str + "' не может быть верно преобразована в Passanger\n" + e.Message);
+            }
         }
 
+        /*
+         * Преобразовывает в строку для 
+         */
         public static explicit operator string(Passanger passanger)
         {
             return passanger.Passport + ";" + passanger.Name + ";" + passanger.Discount;
         }
 
+        /*
+         * Преобразовывает в строку для отображения на экране
+         */
         public override string ToString()
         {
             return string.Format("{0}. Номер паспорта: {1}. Скидка: {2}", Name, Passport, Discount);
-        }
-
-        public override int GetHashCode()
-        {
-            return Passport != null ? Passport.GetHashCode() : 0;
-        }
-
-        protected bool Equals(Passanger other)
-        {
-            return string.Equals(Passport, other.Passport);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((Passanger) obj);
         }
     }
 }

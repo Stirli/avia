@@ -46,8 +46,8 @@
     <Compile Include="Collections\Airport.cs" />
     <Compile Include="Collections\Passangers.cs" />
     <Compile Include="Collections\Tariffs.cs" />
-    <Compile Include="Collections\DataLoaderException.cs" />
-    <Compile Include="Collections\DataLoader.cs" />
+    <Compile Include="Collections\DataLoadException.cs" />
+    <Compile Include="Collections\DataConext.cs" />
     <Compile Include="Data\Tariff.cs" />
     <Compile Include="Data\Passanger.cs" />
     <Compile Include="Data\Discount.cs" />

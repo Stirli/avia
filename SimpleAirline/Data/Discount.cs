@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace SimpleAirline
 {
+    /*
+     * Представляет 
+     */
     public class Discount
     {
         public Discount(double value, DiscountType discountType)

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 // TODO ВАЖНО Если возникнет вопрос: Почему у всех классов данных открытые (public, а не private) setтеры? 
 // Ответ: при помощи такой коллекции, как ObservableCollection и интерфейса INotifyPropertyChanged можно отслеживать изменения в модели
-// На уровне DataLoader, и разрешать/запрещать изменения в зависимости от прав доступа
+// На уровне DataConext, и разрешать/запрещать изменения в зависимости от прав доступа
 namespace SimpleAirline
 {
     class Program
@@ -268,7 +268,7 @@ namespace SimpleAirline
                     Console.Clear();
                 }
             }
-            catch (DataLoaderException e)
+            catch (DataLoadException e)
             {
                 Console.WriteLine(e.Message, e);
             }
@@ -304,6 +304,11 @@ namespace SimpleAirline
             tickets.Add(new Ticket(passanger, tariff, seatNo));
         }
 
+        /*
+         * Выводит на консоль стоимость купленных билетов.
+         * Исключения:
+         * ApplicationException
+         */
         private static void ShowPrice(Airport airport)
         {
             Console.WriteLine(PRICE_ALL);
@@ -315,18 +320,29 @@ namespace SimpleAirline
             }
             else
             {
-                Console.WriteLine(sum);
+                Console.WriteLine("Итого с учетом скидки: "+sum);
             }
         }
 
+        /*
+         * Выводит на консоль стоимость купленных пассажиром билетов.
+         * Исключеня:
+         * ApplicationException
+         */
         private static void ShowPassangerPrice(Airport airport)
         {
             Console.WriteLine(PRICE_OF_PGER);
             try
             {
+                // получаем номер паспорта
                 string passport = ReadString("Введите номер паспорта пассажира");
-                Print(airport.Passangers.GetTickets(passport));
+                // Получаем список билетов
+                IEnumerable<Ticket> tickets = airport.Passangers.GetTickets(passport);
+                // Выводим на экран
+                Print(tickets);
+                // Получаем сумму. выбросит KeyNotFoundException
                 double sum = airport.Sum(passport);
+                // В случае переполнения double получится бесконечно число
                 if (double.IsInfinity(sum))
                 {
                     Console.WriteLine(
@@ -334,10 +350,11 @@ namespace SimpleAirline
                 }
                 else
                 {
-                    Console.WriteLine(sum);
+                    // Если все нормально, выводим результат
+                    Console.WriteLine("Итого с учетом скидки: "+sum);
                 }
             }
-            catch (Exception)
+            catch (KeyNotFoundException)
             {
                 Console.WriteLine("Пассажир не неайден");
             }

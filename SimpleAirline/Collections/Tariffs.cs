@@ -5,22 +5,41 @@ using System.Linq;
 
 namespace SimpleAirline
 {
+    /*
+     * Предоставляет доступ к тарифам
+     */
     public class Tariffs
     {
-        private readonly DataLoader _loader;
-        public Tariffs(DataLoader loader)
+        private readonly DataConext _conext;
+        
+        /*
+         * Конструктор
+         */
+        public Tariffs(DataConext conext)
         {
-            _loader = loader;
-        }
-        public void Create(Tariff entity)
-        {
-            entity.Id = Guid.NewGuid().ToString();
-            _loader.Tariffs.Add(entity);
+            _conext = conext;
         }
 
+        /*
+         * Добавление тарифа
+         */
+        public void Create(Tariff tariff)
+        {
+            // В качестве ключа используем guid
+            tariff.Id = Guid.NewGuid().ToString();
+            // Добавить тариф
+            _conext.Tariffs.Add(tariff);
+        }
+
+        /*
+         * Возвращает тарифы
+         */
         public IEnumerable<Tariff> GetAll()
         {
-            return _loader.Tariffs;
+            List<Tariff> list = new List<Tariff>();
+            foreach (var tariff in _conext.Tariffs)
+                list.Add(tariff);
+            return list;
         }
     }
 }
