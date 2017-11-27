@@ -285,23 +285,38 @@ namespace SimpleAirline
             Console.ReadKey(true);
         }
 
+        /*
+         * Регистрация покупки билета
+         */
         private static void RegTicket(Airport airport)
         {
-            string passport = ReadString("Введите номер пасспорта");
-            Passanger passanger = airport.Passangers.Get(passport);
-            if (passanger == null)
+            try
             {
-                Console.WriteLine("Пассажир не найден");
-                return;
+                string passport = ReadString("Введите номер пасспорта");
+                // Получаем инфо о пассажире
+                Passanger passanger = airport.Passangers.Get(passport);
+                if (passanger == null)
+                {
+                    Console.WriteLine("Пассажир не найден");
+                    return;
+                }
+
+                Console.WriteLine(passanger.ToString());
+                // получаем список тарифов
+                IEnumerable<Tariff> tariffs = airport.Tariffs.GetAll();
+                // Выбор тарифа из списка тарифов
+                Tariff tariff = SelectItem(tariffs, "Выберите тариф");
+                // ввод номера места
+                int seatNo = ReadInt("Посадочное место");
+                // Создаем билет
+                Ticket ticket = new Ticket(passanger, tariff, seatNo);
+                // добавляем билет в базу
+                airport.Passangers.BuyTicket(passport, ticket);
             }
-
-            Console.WriteLine(passanger.ToString());
-
-            ICollection<Ticket> tickets = airport.Passangers.GetTickets(passport);
-            Tariff tariff = SelectItem(airport.Tariffs.GetAll(), "Выберите тариф");
-            int seatNo = ReadInt("Посадочное место");
-
-            tickets.Add(new Ticket(passanger, tariff, seatNo));
+            catch (KeyNotFoundException)
+            {
+                Console.WriteLine("Пасспорт не найден");
+            }
         }
 
         /*
@@ -312,7 +327,7 @@ namespace SimpleAirline
         private static void ShowPrice(Airport airport)
         {
             Console.WriteLine(PRICE_ALL);
-            double sum = airport.Sum();
+            double sum = airport.AllTicketsPrice();
             if (double.IsInfinity(sum))
             {
                 Console.WriteLine(
@@ -341,7 +356,7 @@ namespace SimpleAirline
                 // Выводим на экран
                 Print(tickets);
                 // Получаем сумму. выбросит KeyNotFoundException
-                double sum = airport.Sum(passport);
+                double sum = airport.PassangersTicketsPrice(passport);
                 // В случае переполнения double получится бесконечно число
                 if (double.IsInfinity(sum))
                 {
@@ -356,7 +371,7 @@ namespace SimpleAirline
             }
             catch (KeyNotFoundException)
             {
-                Console.WriteLine("Пассажир не неайден");
+                Console.WriteLine("Пасспорт не неайден");
             }
         }
     }

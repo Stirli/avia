@@ -44,7 +44,7 @@ namespace SimpleAirline
         /*
          * Стоимость всех билетов с учетом скидки
          */
-        public double Sum()
+        public double AllTicketsPrice()
         {
             // сумма
             double sum = 0;
@@ -54,7 +54,6 @@ namespace SimpleAirline
                 // перебираем билеты
                 foreach (Ticket ticket in tickets)
                 {
-
                     sum += ticket.DiscountPrice;
                 }
             }
@@ -68,7 +67,7 @@ namespace SimpleAirline
          * KeyNotFoundException
          */
         // 
-        public double Sum(string passport)
+        public double PassangersTicketsPrice(string passport)
         {
             double sum = 0;
             // Получаем конкретный спсиок билетов конкретного пассажира

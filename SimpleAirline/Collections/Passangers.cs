@@ -56,26 +56,43 @@ namespace SimpleAirline
          */
         public IEnumerable<Passanger> GetAll()
         {
+            // Переносим элементы в новый список, чтобы он не был связан со списков в БД
+            // На самом деле все еще можно изменить сами элементы, но добавить или удалить что-то уже нельзя
             List<Passanger> list = new List<Passanger>();
             foreach (var value in _conext.Passangers.Values)
+            {
                 list.Add(value);
+            }
             return list;
         }
 
         /*
          * Возвращает билеты пассажира, null, если пассажир не найден
-         * ArgumentNullException - passport == null (выбрасывает .ContainsKey(passport) )
+         * ArgumentNullException - passport - null
+         * KeyNotFoundException - такого passport нет
          */
-        public ICollection<Ticket> GetTickets(string passport)
+        public IEnumerable<Ticket> GetTickets(string passport)
         {
-            // проверяем, есть ли в базе пассажиры с таким пасспартом
-            if (_conext.Passangers.ContainsKey(passport))
+            // Создаем и Возвращаем список билетов
+            List<Ticket> list = new List<Ticket>();
+            foreach (var ticket in _conext.PassangersTickets[passport])
             {
-                // Возвращаем пассажира
-                return _conext.PassangersTickets[passport];
+                list.Add(ticket);
             }
-            // Возвращаем null, если нет
-            return null;
+
+            return list;
+        }
+
+        /*
+         * Добавляет билет ticket в список билетов пассажира с паспортом passport
+         * ArgumentNullException - passport - null
+         * KeyNotFoundException - такого passport нет
+         */
+        public void BuyTicket(string passport, Ticket ticket)
+        {
+            // Возвращаем пассажира
+            List<Ticket> tickets = _conext.PassangersTickets[passport];
+            tickets.Add(ticket);
         }
     }
 }
