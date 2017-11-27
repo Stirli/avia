@@ -209,7 +209,7 @@ namespace SimpleAirline
         /*
          * Выводит на консоль стоимость купленных пассажиром билетов.
          * Исключеня:
-         * ApplicationException
+         * ApplicationException - ввод отменен
          */
         private static void ShowPassangerPrice(Airport airport)
         {
@@ -236,6 +236,12 @@ namespace SimpleAirline
                     Console.WriteLine("Итого с учетом скидки: " + sum);
                 }
             }
+            // стоимость билета со сскидкой меньше 0
+            catch (InvalidOperationException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            // при попытке извлечь список билетов по несуществующему пасспорту из DataContext.PassangersTickets
             catch (KeyNotFoundException)
             {
                 Console.WriteLine("Пасспорт не неайден");
