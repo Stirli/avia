@@ -54,7 +54,17 @@ namespace SimpleAirline
                 // перебираем билеты
                 foreach (Ticket ticket in tickets)
                 {
-                    sum += ticket.DiscountPrice;
+                    double discountPrice;
+                    if (ticket.Discount.DiscountType == DiscountType.Procent)
+                    {
+                        discountPrice = ticket.Price * (1 - ticket.Discount.Value);
+                    }
+                    else
+                    {
+                        discountPrice = ticket.Price - ticket.Discount.Value;
+                    }
+
+                    sum += discountPrice;
                 }
             }
 
@@ -74,7 +84,17 @@ namespace SimpleAirline
             List<Ticket> tickets = _context.PassangersTickets[passport];
             foreach (Ticket ticket in tickets)
             {
-                sum += ticket.DiscountPrice;
+                double discountPrice;
+                if (ticket.Discount.DiscountType == DiscountType.Procent)
+                {
+                    discountPrice = ticket.Price * (1 - ticket.Discount.Value);
+                }
+                else
+                {
+                    discountPrice = ticket.Price - ticket.Discount.Value;
+                }
+
+                sum += discountPrice;
             }
 
             return sum;
