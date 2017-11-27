@@ -43,18 +43,27 @@ namespace SimpleAirline
 
         /*
          * Стоимость всех билетов с учетом скидки
+         * InvalidOperationException - один из билетов имеет отрицательную стоимость с учетом скидки
          */
         public double AllTicketsPrice()
         {
             // сумма
             double sum = 0;
             // перебираем списки билетов. _db.PassangersTickets - словарь, с ключом из паспорта пассажира и значением в виде списков
-            foreach (List<Ticket> tickets in _context.PassangersTickets.Values)
+            foreach (KeyValuePair<string, List<Ticket>> entry in _context.PassangersTickets)
             {
+                List<Ticket> tickets = entry.Value;
                 // перебираем билеты
                 foreach (Ticket ticket in tickets)
                 {
-                    sum += ticket.DiscountPrice;
+                    double discountPrice = ticket.DiscountPrice;
+                    if (discountPrice < 0)
+                    {
+                        throw new InvalidOperationException("Билет пассажира " +
+                           entry.Key + " имеет отрицательную стоимость с учетом скидки");
+                    }
+
+                    sum += discountPrice;
                 }
             }
 
@@ -64,7 +73,8 @@ namespace SimpleAirline
         /*
          * Стоимость всех билетов пассажира с учетом скидки
          * string passport - номер пасспорта пассажира
-         * KeyNotFoundException
+         * KeyNotFoundException - пассажир не найден
+         * InvalidOperationException - один из билетов имеет отрицательную стоимость с учетом скидки
          */
         // 
         public double PassangersTicketsPrice(string passport)
@@ -74,6 +84,12 @@ namespace SimpleAirline
             List<Ticket> tickets = _context.PassangersTickets[passport];
             foreach (Ticket ticket in tickets)
             {
+                double discountPrice = ticket.DiscountPrice;
+                if (discountPrice < 0)
+                {
+                    throw new InvalidOperationException("Билет пассажира " +
+                                                       passport + " имеет отрицательную стоимость с учетом скидки");
+                }
                 sum += ticket.DiscountPrice;
             }
 

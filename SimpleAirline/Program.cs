@@ -185,16 +185,24 @@ namespace SimpleAirline
          */
         private static void ShowPrice(Airport airport)
         {
-            Console.WriteLine(PRICE_ALL);
-            double sum = airport.AllTicketsPrice();
-            if (double.IsInfinity(sum))
+            try
             {
-                Console.WriteLine(
-                    "Результат вычесления слишком большой. Обратитесь в службу поддержки.");
+
+                Console.WriteLine(PRICE_ALL);
+                double sum = airport.AllTicketsPrice();
+                if (double.IsInfinity(sum))
+                {
+                    Console.WriteLine(
+                        "Результат вычесления слишком большой. Обратитесь в службу поддержки.");
+                }
+                else
+                {
+                    Console.WriteLine("Итого с учетом скидки: " + sum);
+                }
             }
-            else
+            catch (InvalidOperationException e)
             {
-                Console.WriteLine("Итого с учетом скидки: " + sum);
+                Console.WriteLine(e.Message);
             }
         }
 
