@@ -9,8 +9,11 @@ namespace SimpleAirline
      */
     public class Passanger
     {
+        // Номер паспорта
         public string Passport { get; set; }
+        // Имя
         public string Name { get; set; }
+        // Скидка
         public Discount Discount { get; set; }
 
         /*
@@ -21,8 +24,11 @@ namespace SimpleAirline
         {
             try
             {
+                // делим строку на подстроки
                 string[] strings = str.Split(';');
-                return new Passanger { Passport = strings[0], Name = strings[1], Discount = (Discount)strings[2] };
+                // Создаем объект пассажира
+                Passanger passanger = new Passanger { Passport = strings[0], Name = strings[1], Discount = (Discount)strings[2] };
+                return passanger;
             }
             catch (Exception e)
             {

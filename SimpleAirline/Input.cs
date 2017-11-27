@@ -101,6 +101,7 @@ namespace SimpleAirline
         /* 
          * Полная аналогия с ReadInt, только min и max задаются в теле метода
          * message - сообщение
+         * ApplicationException
          */
         public static DateTime ReadDate(string message = "Введите дату и время")
         {
@@ -134,14 +135,23 @@ namespace SimpleAirline
 
         /*
          * Читает информацию о тарифе
+         * ApplicationException
          */
         public static Tariff ReadTariff()
         {
             Console.WriteLine("Ввод данных о тарифе");
-            return new Tariff(ReadString("Вылет из"), ReadString("Место назначения"), ReadDate(), ReadDouble("Цена на " + DateTime.Now, 0));
+            string @from = ReadString("Вылет из");
+            string destination = ReadString("Место назначения");
+            DateTime date = ReadDate();
+            double price = ReadDouble("Цена на " + DateTime.Now, 0);
+            Tariff tariff = new Tariff(@from, destination, date, price);
+            return tariff;
         }
 
-        // Читает скидку вида -50 или 50%
+        /*
+         * Читает скидку вида -50 или 50%
+         * ApplicationException
+         */
         static Discount ReadDiscount()
         {
             while (true)
@@ -150,7 +160,8 @@ namespace SimpleAirline
                 {
                     // читаем строку и при помощия оператора явного приведения, определенного в  Discount получаем и возвращаем
                     // Discount
-                    return (Discount)ReadString("Введите скидку (-10 или 10%");
+                    Discount discount = (Discount)ReadString("Введите скидку (-10 или 10%");
+                    return discount;
                 }
                 catch (Exception e)
                 {

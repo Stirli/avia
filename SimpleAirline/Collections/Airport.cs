@@ -13,7 +13,7 @@ namespace SimpleAirline
         /*
          * Хранит объект DataConext, загружающий данные в память и предоставляющий доступ непосредственно к ним
          */
-        private DataConext _db;
+        private DataConext _context;
 
 
         public Passangers Passangers { get; private set; }
@@ -26,11 +26,11 @@ namespace SimpleAirline
         public Airport()
         {
             // инициализация DataConext. DataConext читает данные из источника
-            _db = new DataConext();
+            _context = new DataConext();
 
             // Создаем Passangers и Tariffs передаем им общий DataConext
-            Passangers = new Passangers(_db);
-            Tariffs = new Tariffs(_db);
+            Passangers = new Passangers(_context);
+            Tariffs = new Tariffs(_context);
         }
 
         /*
@@ -38,7 +38,7 @@ namespace SimpleAirline
          */
         public void Save()
         {
-            _db.Save();
+            _context.Save();
         }
 
         /*
@@ -49,7 +49,7 @@ namespace SimpleAirline
             // сумма
             double sum = 0;
             // перебираем списки билетов. _db.PassangersTickets - словарь, с ключом из паспорта пассажира и значением в виде списков
-            foreach (List<Ticket> tickets in _db.PassangersTickets.Values)
+            foreach (List<Ticket> tickets in _context.PassangersTickets.Values)
             {
                 // перебираем билеты
                 foreach (Ticket ticket in tickets)
@@ -72,7 +72,7 @@ namespace SimpleAirline
         {
             double sum = 0;
             // Получаем конкретный спсиок билетов конкретного пассажира
-            List<Ticket> tickets = _db.PassangersTickets[passport];
+            List<Ticket> tickets = _context.PassangersTickets[passport];
             foreach (Ticket ticket in tickets)
             {
                 sum += ticket.DiscountPrice;

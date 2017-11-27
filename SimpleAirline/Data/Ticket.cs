@@ -34,16 +34,26 @@ namespace SimpleAirline
                   : price - price / 100 * discount.Value;
         }
 
+        // Номер паспорта
         public string Passport { get; }
+        // Имя пассажира
         public string Name { get; }
+        // Скидка
         public Discount Discount { get; }
+        // Пункт вылета
         public string From { get; }
+        // Пункт назначения
         public string Destination { get; }
+        // Время вылета
         public DateTime Date { get; }
+        // Номер места
         public int SeatNo { get; set; }
+        // Цена
         public double Price { get; set; }
+        // Цена с учетом скидки
         public double DiscountPrice { get; private set; }
 
+        // Оператор явного приведение (для сохранения в файл)
         public static explicit operator string(Ticket ticket)
         {
             return ticket.Passport + ";" + ticket.Name + ";" + ticket.Discount + ";" +
@@ -51,6 +61,7 @@ namespace SimpleAirline
                 ticket.Price;
         }
 
+        // Для вывода на экран в виде текста
         public override string ToString()
         {
             return string.Format(
