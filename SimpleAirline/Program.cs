@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 // TODO ВАЖНО Если возникнет вопрос: Почему у всех классов данных открытые (public, а не private) setтеры? 
 // Ответ: при помощи такой коллекции, как ObservableCollection и интерфейса INotifyPropertyChanged можно отслеживать изменения в модели
@@ -19,7 +20,147 @@ namespace SimpleAirline
         private const string PRICE_ALL = "Cтоимость всех купленных билетов";
         private const string SAVE = "Сохранить данные на диск";
         private const string LIST_PASSANGER = "Список пассажиров";
-        
+
+        private static int ReadInt(string message = "Введите число", int min = int.MinValue, int max = int.MaxValue)
+        {
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine(message);
+                    Console.WriteLine(" Или Ctrl+Z для отмены");
+                    string readLine = Console.ReadLine();
+                    int readInt = int.Parse(readLine);
+                    if (readInt < min || readInt > max)
+                    {
+                        throw new OverflowException();
+                    }
+
+                    return readInt;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Введенная строка не является целым числом.\n Попробуйте еще раз");
+                }
+                catch (ArgumentNullException)
+                {
+                    // если ввести ctr+z, а потом enter, то Console.ReadLine вернет null
+                    throw new ApplicationException("Ввод был отменен");
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine("Число слшком большое или слишком маленькое");
+                    Console.WriteLine("Допустимые значения: {0} - {1}", min, max);
+                    Console.WriteLine("Попробуйте еще раз");
+                }
+            }
+        }
+
+        private static double ReadDouble(string message = "Введите число", double min = double.MinValue, double max = double.MaxValue)
+        {
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine(message);
+                    Console.WriteLine(" Или Ctrl+Z для отмены");
+                    string readLine = Console.ReadLine();
+                    double readInt = double.Parse(readLine);
+                    if (readInt < min || readInt > max)
+                    {
+                        throw new OverflowException();
+                    }
+
+                    return readInt;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Введенная строка не является целым числом.\n Попробуйте еще раз");
+                }
+                catch (ArgumentNullException)
+                {
+                    // если ввести ctr+z, а потом enter, то Console.ReadLine вернет null
+                    throw new ApplicationException("Ввод был отменен");
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine("Число слшком большое или слишком маленькое");
+                    Console.WriteLine("Допустимые значения: {0} - {1}", min, max);
+                    Console.WriteLine("Попробуйте еще раз");
+                }
+            }
+        }
+        private static DateTime ReadDate(string message = "Введите дату и время")
+        {
+            DateTime min = DateTime.Now;
+            DateTime max = DateTime.MaxValue;
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine(message);
+                    Console.WriteLine(" Или Ctrl+Z для отмены");
+                    string readLine = Console.ReadLine();
+                    DateTime date = DateTime.Parse(readLine, CultureInfo.InstalledUICulture);
+                    if (date < min || date > max)
+                    {
+                        throw new OverflowException();
+                    }
+
+                    return date;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Введенная строка не является датой.\n Попробуйте еще раз");
+                }
+                catch (ArgumentNullException)
+                {
+                    // если ввести ctr+z, а потом enter, то Console.ReadLine вернет null
+                    throw new ApplicationException("Ввод был отменен");
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine("Дата слшком большая или слишком маленькая");
+                    Console.WriteLine("Допустимые значения: {0} - {1}", min, max);
+                    Console.WriteLine("Попробуйте еще раз");
+                }
+            }
+        }
+
+        private static string ReadString(string message)
+        {
+            Console.Write(message);
+            Console.WriteLine(" Или CTRL+Z для отмены");
+            string val = Console.ReadLine();
+            if (val == null)
+                throw new ApplicationException("Ввод был отменен.");
+            return val;
+        }
+
+        static Tariff ReadTariff()
+        {
+            Console.WriteLine("Ввод данных о тарифе");
+            return new Tariff(ReadString("Из"), ReadString("В"), ReadDate(), ReadDouble("Цена", 0));
+        }
+        static Discount ReadDiscount()
+        {
+            while (true)
+            {
+                try
+                {
+                    return (Discount)ReadString("Введите скидку (-10 или 10%");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+        }
+        static Passanger ReadPassanger()
+        {
+            Passanger passanger = new Passanger() { Passport = ReadString("Номер пасспорта"), Name = ReadString("ФИО"), Discount = ReadDiscount() };
+            return passanger;
+        }
         static void Print<T>(IEnumerable<T> enumearble)
         {
             Console.WriteLine("---");
@@ -43,7 +184,7 @@ namespace SimpleAirline
                 // Выводим сам элемент
                 Console.WriteLine(item);
             }
-            return enumerable[Input.ReadInt("Введите индекс действия:", 1, i) - 1];
+            return enumerable[ReadInt("Введите индекс действия:", 1, i) - 1];
         }
 
         static void Main(string[] args)
@@ -76,7 +217,7 @@ namespace SimpleAirline
                         {
                             case ADD_TARIFF:
                                 {
-                                    airport.Tariffs.Create(Input.ReadTariff());
+                                    airport.Tariffs.Create(ReadTariff());
                                 }
                                 break;
                             case TARIFF_LIST:
@@ -87,7 +228,7 @@ namespace SimpleAirline
                                 break;
                             case REG_PASSANGER:
                                 {
-                                    Passanger passanger = Input.ReadPassanger();
+                                    Passanger passanger = ReadPassanger();
                                     airport.Passangers.Create(passanger);
                                 }
                                 break;
@@ -151,7 +292,7 @@ namespace SimpleAirline
         {
             try
             {
-                string passport = Input.ReadString("Введите номер пасспорта");
+                string passport = ReadString("Введите номер пасспорта");
                 // Получаем инфо о пассажире
                 Passanger passanger = airport.Passangers.Get(passport);
                 if (passanger == null)
@@ -166,7 +307,7 @@ namespace SimpleAirline
                 // Выбор тарифа из списка тарифов
                 Tariff tariff = SelectItem(tariffs, "Выберите тариф");
                 // ввод номера места
-                int seatNo = Input.ReadInt("Посадочное место");
+                int seatNo = ReadInt("Посадочное место");
                 // Создаем билет
                 Ticket ticket = new Ticket(passanger, tariff, seatNo);
                 // добавляем билет в базу
@@ -209,7 +350,7 @@ namespace SimpleAirline
             try
             {
                 // получаем номер паспорта
-                string passport = Input.ReadString("Введите номер паспорта пассажира");
+                string passport = ReadString("Введите номер паспорта пассажира");
                 // Получаем список билетов
                 IEnumerable<Ticket> tickets = airport.Passangers.GetTickets(passport);
                 // Выводим на экран

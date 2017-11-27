@@ -29,6 +29,9 @@ namespace SimpleAirline
             Date = date;
             SeatNo = seatNo;
             Price = price;
+            DiscountPrice = discount.DiscountType == DiscountType.Static
+                  ? price - discount.Value
+                  : price - price / 100 * discount.Value;
         }
 
         // Номер паспорта
@@ -47,6 +50,8 @@ namespace SimpleAirline
         public int SeatNo { get; set; }
         // Цена
         public double Price { get; set; }
+        // Цена с учетом скидки
+        public double DiscountPrice { get; private set; }
 
         // Оператор явного приведение (для сохранения в файл)
         public static explicit operator string(Ticket ticket)
@@ -59,19 +64,10 @@ namespace SimpleAirline
         // Для вывода на экран в виде текста
         public override string ToString()
         {
-            double discountPrice;
-            if (Discount.DiscountType == DiscountType.Procent)
-            {
-                discountPrice = Price * (1 - Discount.Value);
-            }
-            else
-            {
-                discountPrice = Price - Discount.Value;
-            }
             return string.Format(
                 "ФИО: {0}\nРейс: {1} - {2}\nДата: {3:d} Время: {3:t}\nМесто: {4}\n Стоимость: {5}\n С учетом скидки({6}): {7}", Name,
                 From, Destination, Date, SeatNo, Price, Discount,
-                discountPrice);
+                DiscountPrice);
         }
     }
 }
