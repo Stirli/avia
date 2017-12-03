@@ -118,6 +118,10 @@ namespace SimpleAirline
                                 break;
                         }
                     }
+                    catch (ArgumentException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
                     catch (ApplicationException e)
                     {
                         Console.WriteLine(e.Message);
@@ -127,14 +131,17 @@ namespace SimpleAirline
                     Console.Clear();
                 }
             }
+            // обрабатывает ошибки загрузки данных
             catch (DataLoadException e)
             {
                 Console.WriteLine(e.Message, e);
             }
+            // Обрабатывет выход из меню(приложения)
             catch (ApplicationException e)
             {
                 Console.WriteLine(e.Message);
             }
+            // обрабатывает непредвиденные ошибки
             catch (Exception e)
             {
                 Console.WriteLine(e);
@@ -151,7 +158,7 @@ namespace SimpleAirline
         {
             try
             {
-                string passport = Input.ReadString("Введите номер пасспорта");
+                string passport = Input.ReadString("Введите номер паспорта");
                 // Получаем инфо о пассажире
                 Passanger passanger = airport.Passangers.Get(passport);
                 if (passanger == null)
@@ -171,6 +178,8 @@ namespace SimpleAirline
                 Ticket ticket = new Ticket(passanger, tariff, seatNo);
                 // добавляем билет в базу
                 airport.Passangers.BuyTicket(passport, ticket);
+                Console.WriteLine("Успешно!");
+                Console.WriteLine(ticket);
             }
             catch (KeyNotFoundException)
             {
@@ -241,7 +250,7 @@ namespace SimpleAirline
             {
                 Console.WriteLine(e.Message);
             }
-            // при попытке извлечь список билетов по несуществующему пасспорту из DataContext.PassangersTickets
+            // при попытке извлечь список билетов по несуществующему паспорту из DataContext.PassangersTickets
             catch (KeyNotFoundException)
             {
                 Console.WriteLine("Пасспорт не неайден");

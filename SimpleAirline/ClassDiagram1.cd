@@ -7,15 +7,8 @@
         <Position X="0.11" Y="0.06" Height="0.182" Width="0.847" />
       </MemberNameLabel>
     </AssociationLine>
-    <AssociationLine Name="Tariffs" Type="SimpleAirline.Tariffs" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="7.75" Y="6.19" />
-        <Point X="7.75" Y="6.438" />
-        <Point X="10" Y="6.438" />
-      </Path>
-    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAIAAAAAARAAAAAAAAAAIAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <HashCode>AAAAAIAAAAAATAAAAAAAAAAIAAAAAAIAAAAAAAAAAAA=</HashCode>
       <FileName>Collections\Airport.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -33,13 +26,6 @@
         <Point X="12.75" Y="8.322" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="Passangers" Type="SimpleAirline.Passanger" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="4.938" Y="3.75" />
-        <Point X="4.938" Y="2.967" />
-        <Point X="12.75" Y="2.967" />
-      </Path>
-    </AssociationLine>
     <AssociationLine Name="PassangersTickets" Type="System.Collections.Generic.List&lt;T&gt;" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="3.5" Y="5.104" />
@@ -48,14 +34,21 @@
         <Point X="10.25" Y="11.75" />
       </Path>
     </AssociationLine>
+    <AssociationLine Name="Passangers" Type="SimpleAirline.Passanger" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.938" Y="3.75" />
+        <Point X="4.938" Y="2.967" />
+        <Point X="12.75" Y="2.967" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AABAgIAgAAAAQAAAACEAAAAIIAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Collections\DataConext.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Property Name="Tariffs" />
-      <Property Name="Passangers" />
       <Property Name="PassangersTickets" />
+      <Property Name="Passangers" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="SimpleAirline.DataLoadException">
@@ -68,7 +61,7 @@
   <Class Name="SimpleAirline.Passangers">
     <Position X="10" Y="3.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAAAAAAABAAAAAAAAAQAAAAEAAAgAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAACAABAAAABAAAAAAAAAQAAAAEAAAgAAAAAAAAA=</HashCode>
       <FileName>Collections\Passangers.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -80,6 +73,8 @@
     <AssociationLine Name="_conext" Type="SimpleAirline.DataConext" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="10" Y="6.75" />
+        <Point X="7.833" Y="6.75" Type="JumpStart" />
+        <Point X="7.667" Y="6.75" Type="JumpEnd" />
         <Point X="5.375" Y="6.75" />
         <Point X="5.375" Y="6.459" />
       </Path>
@@ -99,7 +94,7 @@
     <Position X="16.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAIQAAAAAAAAAEAAAAAAAAAAAAIAAAAAAgAAAAAAA=</HashCode>
-      <FileName>Data\Discount.cs</FileName>
+      <FileName>Entities\Discount.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="DiscountType" />
@@ -109,7 +104,7 @@
     <Position X="12.75" Y="2.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAgAAAAAEABQAAAQAAAAAAAAAAgAAAAAAAAA=</HashCode>
-      <FileName>Data\Passanger.cs</FileName>
+      <FileName>Entities\Passanger.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Discount" />
@@ -119,7 +114,7 @@
     <Position X="12.75" Y="6" Width="2" />
     <TypeIdentifier>
       <HashCode>AgACAAAAAQAAAAAEQAQAAAAAAAAAAAAFBAAAAAAAAAA=</HashCode>
-      <FileName>Data\Tariff.cs</FileName>
+      <FileName>Entities\Tariff.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SimpleAirline.Ticket">
@@ -134,7 +129,7 @@
     </AssociationLine>
     <TypeIdentifier>
       <HashCode>AgAAAAAAAQEAAAAEABQAAAQAAgAAAAAFAgAAAAAAAAA=</HashCode>
-      <FileName>Data\Ticket.cs</FileName>
+      <FileName>Entities\Ticket.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Discount" />
@@ -150,18 +145,12 @@
   <Class Name="SimpleAirline.Program">
     <Position X="0.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAJAAiAgAAAEABAEUAAQgAQAABAAAQAAAAUABAAEAQA=</HashCode>
+      <HashCode>AAJAAiAgAAAAAAAEUAAAAAQAABAAAAAAAAQABAAEAAA=</HashCode>
       <FileName>Program.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="System.Collections.Generic.List&lt;T&gt;" Collapsed="true">
     <Position X="10.25" Y="11.5" Width="1.5" />
-    <NestedTypes>
-      <Struct Name="System.Collections.Generic.List&lt;T&gt;.Enumerator" Collapsed="true">
-        <TypeIdentifier />
-        <Lollipop Position="0.2" />
-      </Struct>
-    </NestedTypes>
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
@@ -169,7 +158,7 @@
     <Position X="18.75" Y="7.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
-      <FileName>Data\Discount.cs</FileName>
+      <FileName>Entities\Discount.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />

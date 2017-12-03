@@ -15,24 +15,6 @@ namespace SimpleAirline
          */
         public Tariff(string @from, string destination, DateTime date, double price)
         {
-            // длина не должна быть меньше 3
-            if (from.Length < 3)
-            {
-                throw new ArgumentException("Навание пункта отправления не может быть меньше 3", "from");
-            }
-
-            // длина не должна быть меньше 3
-            if (destination.Length < 3)
-            {
-                throw new ArgumentException("Навание пункта назначения не может быть меньше 3", "destination");
-            }
-
-            // цена не может быть
-            if (price < 0)
-            {
-                throw new ArgumentException("Цена не может быть меньше ", "price");
-            }
-
             From = @from;
             Destination = destination;
             Date = date;

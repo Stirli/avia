@@ -15,7 +15,7 @@ namespace SimpleAirline
         public static string ReadString(string message)
         {
             Console.Write(message);
-            Console.WriteLine(" Или CTRL+Z для отмены");
+            Console.WriteLine("( Или CTRL+Z для отмены )");
             string val = Console.ReadLine();
             if (val == null)
                 throw new ApplicationException("Ввод был отменен.");
@@ -141,9 +141,20 @@ namespace SimpleAirline
         {
             Console.WriteLine("Ввод данных о тарифе");
             string @from = ReadString("Вылет из");
-            string destination = ReadString("Место назначения");
+            if (@from.Length < 3)
+            {
+                throw new ArgumentException("Длина навания пункта отправления не может быть меньше 3", "from");
+            }
+            string destination = ReadString("Место назначения"); if (destination.Length < 3)
+            {
+                throw new ArgumentException("Длина навания назначения не может быть меньше 3", "destination");
+            }
             DateTime date = ReadDate();
-            double price = ReadDouble("Цена на " + DateTime.Now, 0);
+            double price = ReadDouble("Цена на " + DateTime.Now, 0); if (price < 0)
+            {
+                throw new ArgumentException("Цена не может быть меньше ", "price");
+            }
+
             Tariff tariff = new Tariff(@from, destination, date, price);
             return tariff;
         }
@@ -163,6 +174,10 @@ namespace SimpleAirline
                     Discount discount = (Discount)ReadString("Введите скидку (-10 или 10%");
                     return discount;
                 }
+                catch (ApplicationException)
+                {
+                    throw;
+                }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
@@ -173,7 +188,17 @@ namespace SimpleAirline
         // Читаем из консоли инфо о пассажире
         public static Passanger ReadPassanger()
         {
-            Passanger passanger = new Passanger() { Passport = ReadString("Номер пасспорта"), Name = ReadString("ФИО"), Discount = ReadDiscount() };
+            string passport = ReadString("Номер паспорта");
+            if (passport.Length < 9)
+            {
+                throw new ArgumentException("Длина номера паспорта не может быть меньше 9", "Номер паспорта");
+            }
+            string name = ReadString("ФИО");
+            if (name.Length < 3)
+            {
+                throw new ArgumentException("Введите хотя бы 3 символа", "ФИО");
+            }
+            Passanger passanger = new Passanger() { Passport = passport, Name = name, Discount = ReadDiscount() };
             return passanger;
         }
     }

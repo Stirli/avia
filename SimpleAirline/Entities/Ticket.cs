@@ -32,21 +32,22 @@ namespace SimpleAirline
         }
 
         // Номер паспорта
-        public string Passport { get; }
+        public string Passport { get; set; }
         // Имя пассажира
-        public string Name { get; }
+        public string Name { get; set; }
         // Скидка
-        public Discount Discount { get; }
+        public Discount Discount { get; set; }
         // Пункт вылета
-        public string From { get; }
+        public string From { get; set; }
         // Пункт назначения
-        public string Destination { get; }
+        public string Destination { get; set; }
         // Время вылета
-        public DateTime Date { get; }
+        public DateTime Date { get; set; }
         // Номер места
         public int SeatNo { get; set; }
         // Цена
         public double Price { get; set; }
+        // Цена с учетом скидки
         // Цена с учетом скидки
         public double DiscountPrice
         {

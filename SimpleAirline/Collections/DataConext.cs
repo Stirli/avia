@@ -90,7 +90,7 @@ namespace SimpleAirline
                 string passport = arr[0];
                 if (PassangersTickets.ContainsKey(passport))
                 {
-                    // получаем список билетов по ключу (номеру пасспорта)
+                    // получаем список билетов по ключу (номеру паспорта)
                     ticketList = PassangersTickets[passport];
                 }
                 else
@@ -124,6 +124,7 @@ namespace SimpleAirline
                     Passanger passanger = (Passanger)line;
                     // добавляем информацию о пассажире
                     Passangers.Add(passanger.Passport, passanger);
+                    PassangersTickets.Add(passanger.Passport, new List<Ticket>());
                 }
             }
         }

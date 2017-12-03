@@ -24,7 +24,23 @@ namespace SimpleAirline
          * Добавление тарифа
          */
         public void Create(Tariff tariff)
-        {
+        {// длина не должна быть меньше 3
+            if (tariff.From.Length < 3)
+            {
+                throw new ArgumentException("Длина навания отправления не может быть меньше 3", "from");
+            }
+
+            // длина не должна быть меньше 3
+            if (tariff.Destination.Length < 3)
+            {
+                throw new ArgumentException("Длина навания назначения не может быть меньше 3", "destination");
+            }
+
+            // цена не может быть
+            if (tariff.Price < 0)
+            {
+                throw new ArgumentException("Цена не может быть меньше ", "price");
+            }
             // В качестве ключа используем guid
             tariff.Id = Guid.NewGuid().ToString();
             // Добавить тариф

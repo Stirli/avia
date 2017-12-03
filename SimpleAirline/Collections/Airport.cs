@@ -72,7 +72,7 @@ namespace SimpleAirline
 
         /*
          * Стоимость всех билетов пассажира с учетом скидки
-         * string passport - номер пасспорта пассажира
+         * string passport - номер паспорта пассажира
          * KeyNotFoundException - пассажир не найден
          * InvalidOperationException - один из билетов имеет отрицательную стоимость с учетом скидки
          */
