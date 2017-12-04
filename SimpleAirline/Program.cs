@@ -372,9 +372,9 @@ namespace SimpleAirline
                     {
                         Console.WriteLine(e.Message);
                     }
-                    //Console.WriteLine("Нажмите любую клавишу.");
-                    //Console.ReadKey(true);
-                    //Console.Clear();
+                    Console.WriteLine("Нажмите любую клавишу.");
+                    Console.ReadKey(true);
+                    Console.Clear();
                 }
             }
 
@@ -396,7 +396,6 @@ namespace SimpleAirline
 
             Console.WriteLine("\nНажмите любую клавишу...");
             Console.ReadKey(true);
-            Console.Clear();
         }
 
         // ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// //////////

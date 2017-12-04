@@ -102,7 +102,7 @@ namespace SimpleAirline
             // назначаем скидку равной стоимости билета (или 100%, но операция вычитание дешевле деления. такая себе микрооптимизация)
             if (ticket.DiscountPrice < 0)
             {
-                ticket.Discount = new Discount(ticket.Price, DiscountType.Static);
+                ticket.Discount = new Discount(ticket.Price, DiscountType.Static);         ///  !!!!!!!!!!!!!!!!!!!!!!!!!
             }
 
             // Получаем билеты пассажира

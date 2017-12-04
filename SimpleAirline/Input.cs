@@ -177,37 +177,49 @@ namespace SimpleAirline
          */
         public static Tariff ReadTariff()
         {
-                Console.WriteLine("\nВвод данных о тарифе:");
-                string @from = ReadString("  Вылет из");
-
-                if (@from.Length < 3)
+            while (true)
+            {
+                try
                 {
+                    Console.WriteLine("\nВвод данных о тарифе:");
+                    string @from = ReadString("  Вылет из");
+
+                    if (@from.Length < 3)
+                    {
                         // !!! Было.
                         //throw new ArgumentException("Длина названия пункта отправления не может быть меньше 3", "from");
-                        throw new ArgumentException("\n  Длина названия пункта отправления не может быть меньше 3 символов.");
+                        throw new ArgumentException(
+                            "\n  Длина названия пункта отправления не может быть меньше 3 символов.");
+                    }
+
+                    string destination = ReadString("  Место назначения");
+
+                    if (destination.Length < 3)
+                    {
+                        // !!! Было.
+                        //throw new ArgumentException("Длина названия назначения не может быть меньше 3", "destination");
+                        throw new ArgumentException(
+                            "\n  Длина названия пункта назначения не может быть меньше 3 символов.");
+                    }
+                    DateTime date = ReadDate();
+
+                    //double price = ReadDouble("Цена на " + DateTime.Now, 0);    // Было.
+                    double price = ReadDouble("  Цена перелета");
+
+                    if (price < 0)
+                    {
+                        throw new ArgumentException("Цена не может быть меньше ", "price");
+                    }
+
+                    Tariff tariff = new Tariff(@from, destination, date, price);
+                    return tariff;
                 }
-
-                string destination = ReadString("  Место назначения");
-
-                if (destination.Length < 3)
+                catch (ArgumentException e)
                 {
-                    // !!! Было.
-                    //throw new ArgumentException("Длина названия назначения не может быть меньше 3", "destination");
-                    throw new ArgumentException("\n  Длина названия пункта назначения не может быть меньше 3 символов.");
+                    Console.WriteLine(e.Message);
                 }
-                DateTime date = ReadDate();
-
-                //double price = ReadDouble("Цена на " + DateTime.Now, 0);    // Было.
-                double price = ReadDouble("  Цена перелета");
-
-                if (price < 0)
-                {
-                    throw new ArgumentException("Цена не может быть меньше ", "price");
-                }
-
-                Tariff tariff = new Tariff(@from, destination, date, price);
-                return tariff;
             }
+        }
 
         /*
          * Читает скидку вида -50 или 50%
@@ -221,7 +233,7 @@ namespace SimpleAirline
                 {
                     // читаем строку и при помощия оператора явного приведения, определенного в  Discount получаем и возвращаем
                     // Discount
-                    Discount discount = (Discount)ReadString("  Введите скидку");
+                    Discount discount = (Discount) ReadString("  Введите скидку");
                     return discount;
                 }
                 catch (ApplicationException)
@@ -238,22 +250,32 @@ namespace SimpleAirline
         // Читаем из консоли инфо о пассажире
         public static Passanger ReadPassanger()
         {
-            string passport = ReadString("  Номер паспорта");    // +++
-
-            if (passport.Length < 9)
+            while (true)
             {
-                //throw new ArgumentException("Длина номера паспорта не может быть меньше 9", "Номер паспорта");    // !!! Было.
-                throw new ArgumentException("\n  Длина номера паспорта не может быть меньше 9 символов.");    // +++
-            }
+                try
+                {
+                    string passport = ReadString("  Номер паспорта");    // +++
 
-            string name = ReadString("  ФИО");
-            if (name.Length < 3)
-            {
-                //throw new ArgumentException("Введите хотя бы 3 символа", "ФИО");    // !!! Было.
-                throw new ArgumentException("\n  Введите хотя бы 3 символа.");    // +++
+                    if (passport.Length < 9)
+                    {
+                        //throw new ArgumentException("Длина номера паспорта не может быть меньше 9", "Номер паспорта");    // !!! Было.
+                        throw new ArgumentException("\n  Длина номера паспорта не может быть меньше 9 символов.");    // +++
+                    }
+
+                    string name = ReadString("  ФИО");
+                    if (name.Length < 3)
+                    {
+                        //throw new ArgumentException("Введите хотя бы 3 символа", "ФИО");    // !!! Было.
+                        throw new ArgumentException("\n  Введите хотя бы 3 символа.");    // +++
+                    }
+                    Passanger passanger = new Passanger() { Passport = passport, Name = name, Discount = ReadDiscount() };
+                    return passanger;
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
-            Passanger passanger = new Passanger() { Passport = passport, Name = name, Discount = ReadDiscount() };
-            return passanger;
         }
     }
 }
