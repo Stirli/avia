@@ -1,11 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
+﻿// ??????????????????????????????????????????????????
+// todo: Collections
+// todo:     Airport
+// todo:     DataConext
+// todo:     DataLoadException
+// todo:     Passangers
+// todo:     Tariffs
+// todo: Data
+// todo:     Discount    // +++
+// todo:     Passanger    // +++
+// todo:     Tariff    // +++
+// todo:     Ticket
+// ??????????????????????????????????????????????????
 
+
+
+// ??????????????????????????????????????????????????
+// todo: Input.cs ReadString
+// todo: Input.cs ReadInt    // В "Input.cs" не используется.
+// todo: Input.cs ReadDouble
+// todo: Input.cs ReadDate
+// todo: Input.cs ReadTariff    // В "Input.cs" не используется.
+// todo: Input.cs ReadDiscount
+// todo: Input.cs ReadPassanger    // В "Input.cs" не используется.
+// ??????????????????????????????????????????????????
+
+
+
+// ??????????????????????????????????????????????????
+// todo: Нужны ли все библиотеки?
+// ??????????????????????????????????????????????????
+
+using System;
+//using System.Collections.Generic;
+using System.Globalization;
+//using System.Linq;
+//using System.Text;
+
+// !!! "Airline" - "Авиакомпания".
 namespace SimpleAirline
 {
+    // ??? (ПОЯСНИТЬ.) Класс "Input" ("Ввод"). ...
     class Input
     {
         /*
@@ -15,10 +49,10 @@ namespace SimpleAirline
         public static string ReadString(string message)
         {
             Console.Write(message);
-            Console.WriteLine("( Или CTRL+Z для отмены )");
+            Console.Write(" (отмена - Ctrl+Z): ");
             string val = Console.ReadLine();
             if (val == null)
-                throw new ApplicationException("Ввод был отменен.");
+                throw new ApplicationException("\n  Ввод был отменен.");
             return val;
         }
 
@@ -51,13 +85,13 @@ namespace SimpleAirline
                 }
                 catch (FormatException)
                 {
-                    Console.WriteLine("Введенная строка не является целым числом.\n Попробуйте еще раз");
+                    Console.WriteLine("\n  Введенная строка не является целым числом.\n  Попробуйте еще раз.");
                 }
                 catch (OverflowException)
                 {
-                    Console.WriteLine("Число слшком большое или слишком маленькое");
-                    Console.WriteLine("Допустимые значения: {0} - {1}", min, max);
-                    Console.WriteLine("Попробуйте еще раз");
+                    Console.WriteLine("\n  Число слшком большое или слишком маленькое.");
+                    Console.WriteLine("  Допустимые значения: {0} - {1}.", min, max);
+                    Console.WriteLine("  Попробуйте еще раз.");
                 }
             }
         }
@@ -103,7 +137,7 @@ namespace SimpleAirline
          * message - сообщение
          * ApplicationException
          */
-        public static DateTime ReadDate(string message = "Введите дату и время")
+        public static DateTime ReadDate(string message = "  Дата и время вылета")
         {
             DateTime min = DateTime.Now;
             DateTime max = DateTime.MaxValue;
@@ -133,31 +167,47 @@ namespace SimpleAirline
             }
         }
 
+
+
+
+
         /*
          * Читает информацию о тарифе
          * ApplicationException
          */
         public static Tariff ReadTariff()
         {
-            Console.WriteLine("Ввод данных о тарифе");
-            string @from = ReadString("Вылет из");
-            if (@from.Length < 3)
-            {
-                throw new ArgumentException("Длина навания пункта отправления не может быть меньше 3", "from");
-            }
-            string destination = ReadString("Место назначения"); if (destination.Length < 3)
-            {
-                throw new ArgumentException("Длина навания назначения не может быть меньше 3", "destination");
-            }
-            DateTime date = ReadDate();
-            double price = ReadDouble("Цена на " + DateTime.Now, 0); if (price < 0)
-            {
-                throw new ArgumentException("Цена не может быть меньше ", "price");
-            }
+                Console.WriteLine("\nВвод данных о тарифе:");
+                string @from = ReadString("  Вылет из");
 
-            Tariff tariff = new Tariff(@from, destination, date, price);
-            return tariff;
-        }
+                if (@from.Length < 3)
+                {
+                        // !!! Было.
+                        //throw new ArgumentException("Длина названия пункта отправления не может быть меньше 3", "from");
+                        throw new ArgumentException("\n  Длина названия пункта отправления не может быть меньше 3 символов.");
+                }
+
+                string destination = ReadString("  Место назначения");
+
+                if (destination.Length < 3)
+                {
+                    // !!! Было.
+                    //throw new ArgumentException("Длина названия назначения не может быть меньше 3", "destination");
+                    throw new ArgumentException("\n  Длина названия пункта назначения не может быть меньше 3 символов.");
+                }
+                DateTime date = ReadDate();
+
+                //double price = ReadDouble("Цена на " + DateTime.Now, 0);    // Было.
+                double price = ReadDouble("  Цена перелета");
+
+                if (price < 0)
+                {
+                    throw new ArgumentException("Цена не может быть меньше ", "price");
+                }
+
+                Tariff tariff = new Tariff(@from, destination, date, price);
+                return tariff;
+            }
 
         /*
          * Читает скидку вида -50 или 50%
@@ -171,7 +221,7 @@ namespace SimpleAirline
                 {
                     // читаем строку и при помощия оператора явного приведения, определенного в  Discount получаем и возвращаем
                     // Discount
-                    Discount discount = (Discount)ReadString("Введите скидку (-10 или 10%");
+                    Discount discount = (Discount)ReadString("  Введите скидку");
                     return discount;
                 }
                 catch (ApplicationException)
@@ -188,15 +238,19 @@ namespace SimpleAirline
         // Читаем из консоли инфо о пассажире
         public static Passanger ReadPassanger()
         {
-            string passport = ReadString("Номер паспорта");
+            string passport = ReadString("  Номер паспорта");    // +++
+
             if (passport.Length < 9)
             {
-                throw new ArgumentException("Длина номера паспорта не может быть меньше 9", "Номер паспорта");
+                //throw new ArgumentException("Длина номера паспорта не может быть меньше 9", "Номер паспорта");    // !!! Было.
+                throw new ArgumentException("\n  Длина номера паспорта не может быть меньше 9 символов.");    // +++
             }
-            string name = ReadString("ФИО");
+
+            string name = ReadString("  ФИО");
             if (name.Length < 3)
             {
-                throw new ArgumentException("Введите хотя бы 3 символа", "ФИО");
+                //throw new ArgumentException("Введите хотя бы 3 символа", "ФИО");    // !!! Было.
+                throw new ArgumentException("\n  Введите хотя бы 3 символа.");    // +++
             }
             Passanger passanger = new Passanger() { Passport = passport, Name = name, Discount = ReadDiscount() };
             return passanger;

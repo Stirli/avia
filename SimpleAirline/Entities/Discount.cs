@@ -1,11 +1,17 @@
-﻿using System;
+﻿// ??????????????????????????????????????????????????
+// todo: Нужны ли все библиотеки?
+// ??????????????????????????????????????????????????
+
+using System;
 using System.Text.RegularExpressions;
 
+// !!! "Airline" - "Авиакомпания".
 namespace SimpleAirline
 {
     /*
      * Представляет 
      */
+    // ??? (ПОЯСНИТЬ.) Класс "Discount" ("Скидка"). ??? Предоставляет ...
     public class Discount
     {
         public Discount(double value, DiscountType discountType)
@@ -13,11 +19,13 @@ namespace SimpleAirline
             if (value < 0)
             {
                 throw new ArgumentOutOfRangeException("value", value, "Значение скидки не может быть меньше 0");
+                //throw new ArgumentOutOfRangeException("\n  Значение скидки не может быть меньше 0.");
             }
 
-            if (discountType == DiscountType.Procent && value > 100)
+            if (discountType == DiscountType.Procent && value > 90)
             {
-                throw new ArgumentOutOfRangeException("value", value, "Значение скидки не может быть больше 100");
+                //throw new ArgumentOutOfRangeException("value", value, "Значение скидки не может быть больше 90");    // !!! Было.
+                throw new ArgumentOutOfRangeException("value", value, "\n  Значение скидки не может быть больше 90%.");    // !!! Было.
             }
             Value = value;
             DiscountType = discountType;
@@ -51,7 +59,7 @@ namespace SimpleAirline
                 discountType = DiscountType.Procent;
             }
             // если что-то не так
-            else throw new FormatException("Неверный тип скидки");
+            else throw new FormatException("\n  Неверный тип скидки.\n");
             // Извлекаем значение в виде строки и парсим его
             double value = double.Parse(match.Groups["value"].Value);
             // Возвращаем скидку

@@ -1,9 +1,15 @@
-﻿using System;
-using System.Globalization;
-using System.Text;
+﻿// ??????????????????????????????????????????????????
+// todo: Нужны ли все библиотеки?
+// ??????????????????????????????????????????????????
 
+using System;
+using System.Globalization;
+//using System.Text;
+
+// !!! "Airline" - "Авиакомпания".
 namespace SimpleAirline
 {
+    // ??? (ПОЯСНИТЬ.) Класс "Ticket" ("Билет"). ??? Предоставляет ...
     public class Ticket
     {
         public Ticket(Passanger passanger, Tariff tariff, int seatNo)
@@ -74,7 +80,7 @@ namespace SimpleAirline
         public override string ToString()
         {
             return string.Format(
-                "ФИО: {0}\nРейс: {1} - {2}\nДата: {3:d} Время: {3:t}\nМесто: {4}\n Стоимость: {5}\n С учетом скидки({6}): {7}", Name,
+                "    ФИО: {0}.\n    Рейс: {1} - {2}.\n    Дата: {3:d}, время: {3:t}.\n    Место: {4}.\n    Стоимость: {5} р.\n    С учетом скидки ({6}): {7} р.", Name,
                 From, Destination, Date, SeatNo, Price, Discount,
                 DiscountPrice);
         }
