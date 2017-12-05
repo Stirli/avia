@@ -1,38 +1,35 @@
 ﻿// ??????????????????????????????????????????????????
-// todo: Collections
-// todo:     Airport    // +++
-// todo:     DataConext
-// todo:     DataLoadException    // +++    ??? (ИСПОЛЬЗУЕТСЯ В ЭКСЕПШЕНЕ.)
-// todo:     Passangers
-// todo:     Tariffs    // +++
-// todo: Data
-// todo:     Discount
-// todo:     Passanger    // +++
-// todo:     Tariff    // +++
-// todo:     Ticket    // +++
+// todo: Почему сделана такая структура проекта?
+// todo:   + "Data" "Данные" и "Collections" - "Коллекции".
+// todo: Как и куда подключаются папки классов "Collections" и "Data".
+// todo:   + "Input.cs".
 // ??????????????????????????????????????????????????
 
 
 
 // ??????????????????????????????????????????????????
-// todo: Program.cs SelectItem
-// todo: Program.cs Print
-// todo: Program.cs RegTicket
-// todo: Program.cs ShowPassangerPrice
-// todo: Program.cs ShowPrice
-// todo: Program.cs Main
+// todo: Collections            Коллекции
+// todo:     Airport                Аэропорт
+// todo:     DataConext             Контекст данных               ???
+// todo:     DataLoadException      Исключение загрузки данных    ???
+// todo:     Passangers             Пассажиры
+// todo:     Tariffs                Тарифы
+// todo: Data                   Данные
+// todo:     Discount               Скидка
+// todo:     Passanger              Пассажир
+// todo:     Tariff                 Тариф
+// todo:     Ticket                 Билет
 // ??????????????????????????????????????????????????
 
 
 
 // ??????????????????????????????????????????????????
-// todo: Input.cs ReadString    // (+++)
-// todo: Input.cs ReadInt    // (+++) В "Input.cs" не используется.
-// todo: Input.cs ReadDouble    // (---)
-// todo: Input.cs ReadDate    // (---)
-// todo: Input.cs ReadTariff    // (+++) В "Input.cs" не используется.
-// todo: Input.cs ReadDiscount    // (---)
-// todo: Input.cs ReadPassanger    // (+++) В "Input.cs" не используется.
+// todo: Program.cs  Print
+// todo: Program.cs  SelectItem
+// todo: Program.cs  RegTicket
+// todo: Program.cs  ShowPrice
+// todo: Program.cs  ShowPassangerPrice
+// todo: Program.cs  Main
 // ??????????????????????????????????????????????????
 
 
@@ -40,21 +37,18 @@
 // ??????????????????????????????????????????????????
 // todo: namespace SimpleAirline
 //
-// todo: Нужны ли все библиотеки?
-//
-// todo: Почему сделана такая структура проекта?
-// todo:   + "Data" "Данные" и "Collections" - "Коллекции".
-// todo: Как и куда подключаются папки классов "Collections" и "Data".
-// todo:   + "Input.cs".
-// todo:   + Нахрена выделять "Input.cs" в отдельный класс.
+// todo: Где надо поставить 90% (0,9) при подсчете скидки?
+// todo: Не сработал пассажир ВВ3333333. См. скриншоты 2, 3.
 // ??????????????????????????????????????????????????
 
-//using SimpleAirline;
 using System;
-using System.Collections.Generic;
-//using System.Globalization;
+using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
 
+
+
+// ??????????
 // TODO ВАЖНО Если возникнет вопрос: Почему у всех классов данных открытые (public, а не private) setтеры? 
 // Ответ: при помощи такой коллекции, как ObservableCollection и интерфейса INotifyPropertyChanged можно отслеживать изменения в модели
 // На уровне DataConext, и разрешать/запрещать изменения в зависимости от прав доступа
@@ -62,11 +56,12 @@ using System.Linq;
 // !!! "Airline" - "Авиакомпания".
 namespace SimpleAirline
 {
+    // ??? Класс "Program". ...
     class Program
     {
         // ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// //////////
 
-        //
+        // Константы
         // ??? Почему мы делаем так, а потом это идет в Меню?
         // ??? "private const string".
         private const string ADD_TARIFF = "Добавить тариф.";
@@ -81,13 +76,12 @@ namespace SimpleAirline
         // ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// //////////
 
         //
-        // ??? + входные параметры?
-        static void Print<T>(IEnumerable<T> enumearble)
+        // ??? + входные параметры?   Коллекция, которя будет выведена на экран.
+        static void Print(IEnumerable enumearble)
         {
             Console.WriteLine("---------------------------------------------------------------------------");
 
-            //
-            foreach (T obj in enumearble)
+            foreach (object obj in enumearble)
             {
                 Console.WriteLine(obj);
                 Console.WriteLine("---------------------------------------------------------------------------");
@@ -95,114 +89,142 @@ namespace SimpleAirline
         }
 
         // ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// //////////
-
-        // Выводит список на экран, индексируя, и возвращает введенный пользователем индекс
-
-        // ??? Выводим список на экран, индексируя.    (ЧТО ЗА СПИСОК?)
-        // !!! Возвращает введенный пользователем индекс.
+        
+        // ??? Выводим список на экран, индексируя.    (ЧТО ЗА СПИСОК И ИНДЕКСИРУЯ?)
+        // ??? Возвращает введенный пользователем индекс.
         // ??? + входные параметры?
         // ??? Пояснить всю строку...
+        // ??? Здесь происходит нумерация.
+        // ??? Этим методом нумеруем:
+        //       -Program.cs  Меню.
+        //       -Program.cs  Тарифы
+        //       -...
         static T SelectItem<T>(IEnumerable<T> items, string message)
         {
             //
             Console.WriteLine(message);
 
-            // ??? Счетчик ... (ДЛЯ ЧЕГО?)
+            // ??? Счетчик ... (ДЛЯ ЧЕГО?)  Индекс элемента
             int i = 0;
 
-            //
-            // + "... ?? ..."
-            IList<T> enumerable = items as IList<T> ?? items.ToList();
+            // Приводим переданную коллекцию к типу IList
+            IList<T> list = items as IList<T> ?? items.ToList();
 
-            //
-            foreach (T item in enumerable)
+            // Перечисляем  список.
+            foreach (T item in list)
             {
-                // ??? Сначала выводим индекс.
+                // +++ !!! Выводим индекс.
                 Console.Write("{0,3}: ", ++i);
-                // ??? Выводим сам элемент.
+                // +++ !!! Выводим элемент.
                 Console.WriteLine(item);
             }
 
             //
-            // !!!!! Обращаемся к классу "Input" к методу "ReadInt".
+            // --- !!!!! Обращаемся к классу "Input" к методу "ReadInt".
             // ??? "...  1, i) - 1];" ?
-            return enumerable[Input.ReadInt("\nВведите пункт меню", 1, i) - 1];
+            
+            // Ползователь вводит индекс
+            int index = Input.ReadInt("\nВведите пункт меню", 1, i);
+            // Получаем элемент по индексу
+            T selectItem = list[index - 1];
+            // Возвращаем заданный (выбранный) элемент
+            return selectItem;    // +++
         }
 
         // ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// //////////
 
-        // todo: Collections
-        // todo:     Airport
-
-        // !!! Регистрация покупки билета.
-        // ??? + входные параметры?
+        // +++ !!! Регистрация покупки билета.
+        // ??? + входные параметры?     Объект класса аэропорт
         private static void RegTicket(Airport airport)
         {
             try
             {
-                //string passport = Input.ReadString("Введите номер паспорта");    // !!! Было.
+                // 
                 string passport = Input.ReadString("  Введите номер паспорта");
-                //Console.WriteLine("  Введите номер паспорта.");
                 
                 // ??? Получаем инфо о пассажире.
+                // ??? Пояснить после знака равно.
                 Passanger passanger = airport.Passangers.Get(passport);
                 
+                // +++ !!! Пустая строка.
                 Console.WriteLine();
-                
+
+                //Пассажир не найден
                 if (passanger == null)
                 {
-                    Console.WriteLine("  Пассажир не найден.");
+                    Console.WriteLine("    Пассажир не найден.");    // +++
+
+                    //
                     return;
                 }
 
                 // Вывод пассажира по запросу паспорта.
                 Console.WriteLine("  " + passanger.ToString());
 
+                // +++ !!! Пустая строка.
                 Console.WriteLine();
 
-                // получаем список тарифов
+                // +++ !!! Получаем список тарифов.
+                //
                 IEnumerable<Tariff> tariffs = airport.Tariffs.GetAll();
-                // Выбор тарифа из списка тарифов
+
+                // +++ !!! Выбор тарифа из списка тарифов
+                // +++ !!!!! Вызываем метод "SelectItem".
+                // ??? Обращвемся к классу "Tariff". 
                 Tariff tariff = SelectItem(tariffs, "Выберите тариф:");    // +++
-                // ввод номера места
+
+                // !!! Ввод номера места.
+                // ??? Обращвемся к классу "Input".
                 int seatNo = Input.ReadInt("Посадочное место");    // +++
-                // Создаем билет
+
+                // !!! Создаем билет.
+                // ??? Пояснить строку.
+                // ??? Обращвемся к классу "Ticket".
                 Ticket ticket = new Ticket(passanger, tariff, seatNo);
-                // добавляем билет в базу
+
+                // !!! Добавляем билет в базу.
                 airport.Passangers.BuyTicket(passport, ticket);
                 Console.WriteLine("\n  Регистрация прошла успешно:");    // +++
+
+                // ??? Выводим зарегистрированный билет.
                 Console.WriteLine(ticket);
             }
+            //
+            // ??? В каких случаях выдает этот эксепшен, поскольку в пункте 5 выдает при вводе № паспорта сообщение "Пассажир не найден".
             catch (KeyNotFoundException)
             {
-                Console.WriteLine("Пасспорт не найден");
+                Console.WriteLine("Пасспорт не найден.....");
             }
         }
 
         // ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// //////////
 
-        /*
-         * Выводит на консоль стоимость купленных билетов.
-         * Исключения:
-         * ApplicationException
-         */
+        // +++ !!! Выводим на консоль стоимость купленных билетов.
+        // ??? Исключения: ApplicationException.
+        // ??? + входные параметры?
         private static void ShowPrice(Airport airport)
         {
             try
             {
-
+                // Выводим сообщение.
                 Console.WriteLine("\nCтоимость всех купленных билетов:");
+
+                //
                 double sum = airport.AllTicketsPrice();
+
+                //
                 if (double.IsInfinity(sum))
                 {
                     // ???
                     Console.WriteLine("Результат вычесления слишком большой. Обратитесь в службу поддержки.");
                 }
+                //
                 else
                 {
                     Console.WriteLine("Итого с учетом скидки: " + sum);
                 }
             }
+            //
             catch (InvalidOperationException e)
             {
                 Console.WriteLine(e.Message);
@@ -211,41 +233,29 @@ namespace SimpleAirline
 
         // ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// //////////
 
-        // todo: Collections
-        // todo:     Airport
-
-        // !!! Выводим на консоль стоимость купленных пассажиром билетов.
+        // +++ !!! Выводим на консоль стоимость купленных пассажиром билетов.
         // ??? Исключеня: ApplicationException.
         // ??? + входные параметры?
-
         private static void ShowPassangerPrice(Airport airport)
         {
+            // +++ !!! Вывод сообщение.
             Console.WriteLine("\nCтоимость купленных пассажиром билетов:");
+
             try
             {
-                // !!! Получаем номер паспорта.
-                // !!!!! Обращаемся к классу "Input" к методу "ReadString".
-                // ??? Где выводит это сообщение?
+                // +++ !!! Получаем номер паспорта.
+                // --- !!!!! Обращаемся к классу "Input" к методу "ReadString".
                 string passport = Input.ReadString("  Введите номер паспорта пассажира");    // +++
 
-
-                // ??? todo: Collections
-                // ??? todo:     Passangers
-
-                // ??? todo: Data
-                // ??? todo:     Ticket
-
-                //
                 // !!! Получаем список билетов.
+                // ??? Пояснить строку.
                 IEnumerable<Ticket> tickets = airport.Passangers.GetTickets(passport);
 
                 // ??? Выводим на экран список билетов.
-                // !!!!! Вызываем метод "Print".
+                // +++ !!!!! Вызываем метод "Print".
                 Print(tickets);
 
-
-
-                // Получаем сумму. выбросит KeyNotFoundException
+                // ??? Получаем сумму. выбросит KeyNotFoundException
                 double sum = airport.PassangersTicketsPrice(passport);
 
                 //
@@ -257,37 +267,39 @@ namespace SimpleAirline
                 }
                 else
                 {
-                    // Если все нормально, выводим результат
+                    // ?? Если все нормально, выводим результат.
                     Console.WriteLine("  Итого с учетом скидки: " + sum + " р.");
                 }
             }
-            // стоимость билета со сскидкой меньше 0
+            // ??? Стоимость билета со сскидкой меньше 0.
             catch (InvalidOperationException e)
             {
                 Console.WriteLine(e.Message);
             }
-            // при попытке извлечь список билетов по несуществующему паспорту из DataContext.PassangersTickets
+            // ??? При попытке извлечь список билетов по несуществующему паспорту из DataContext.PassangersTickets.
             catch (KeyNotFoundException)
             {
-                Console.WriteLine("Пасспорт не неайден");
+                Console.WriteLine("Пасспорт не неайден.");
             }
         }
 
         // ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// ////////// //////////
 
-
+        // !!! +++ Main.
         static void Main(string[] args)
         {
-
+            //
             Airport airport;
+
             try
             {
-                // Создаем пустой каталог
+                // +++ !!! Создаем пустой каталог.
                 airport = new Airport();
 
                 while (true)
                 {
-                    // Меню.
+                    // +++ !!! Меню.
+                    // +++ !!!!! Вызываем метод "SelectItem".
                     string select = SelectItem(new[]
                     {
                         ADD_TARIFF,
@@ -298,103 +310,140 @@ namespace SimpleAirline
                         PRICE_OF_PGER,
                         PRICE_ALL,
                         SAVE
-                    }, "\nГлавное меню:");
-
-                    //Console.Clear();
+                    }, "Главное меню:");
 
                     try
                     {
                         switch (select)
                         {
+                            // ??????????????????????????????????????????????????
+                            // todo: Почему "break" вне фигурных скобок?
+                            // ??????????????????????????????????????????????????
+
                             // 1. Добавить тариф.
                             case ADD_TARIFF:
                                 {
+                                    //
+                                    // ??? Пояснитьь строку.
+                                    // --- !!!!! Обращаемся к классу "Input" к методу "ReadTariff".
                                     airport.Tariffs.Create(Input.ReadTariff());
                                 }
                                 break;
                             // 2. Список тарифов.
                             case TARIFF_LIST:
                                 {
+                                    // +++ !!! Выводим сообщение.
                                     Console.WriteLine("\nСписок тарифов:");
+
+                                    // ??? Выводим в консоли список тарифов.
+                                    // +++ !!!!! Вызываем метод "Print".
+                                    // ??? Пояснить строку.
                                     Print(airport.Tariffs.GetAll());
                                 }
                                 break;
                             // 3. Зарегестрировать пассажира.
                             case REG_PASSANGER:
                                 {
+                                    // +++ !!! Выводим сообщение.
                                     Console.WriteLine("\nВведите данные о пасажире:");
 
+                                    //
                                     Passanger passanger = Input.ReadPassanger();
+
+                                    //
                                     airport.Passangers.Create(passanger);
                                 }
                                 break;
                             // 4. Список пассажиров.
                             case LIST_PASSANGER:
                                 {
+                                    // +++ !!! Выводим сообщение.
+                                    Console.WriteLine("\nСписок пассажиров:");
+
+                                    //
+                                    // +++ !!!!! Вызываем метод "Print".
                                     Print(airport.Passangers.GetAll());
                                 }
                                 break;
                             // 5. Регистрировать покупку билета.
                             case REG_TICKET:
                                 {
+                                    // +++ !!! Выводим сообщение.
                                     Console.WriteLine("\nРегистрация билета:");
 
+                                    //
+                                    // +++ !!!!! Вызываем метод "RegTicket".
                                     RegTicket(airport);
                                 }
                                 break;
                             // 6. Cтоимость купленных пассажиром билетов.
                             case PRICE_OF_PGER:
                                 {
+                                    //
+                                    // !!!!! Вызываем метод "ShowPassangerPrice".
                                     ShowPassangerPrice(airport);
                                 }
                                 break;
                             // 7. Cтоимость всех купленных билетов.
                             case PRICE_ALL:
                                 {
+                                    //
+                                    // +++ !!!!! Вызываем метод "ShowPrice".
                                     ShowPrice(airport);
                                 }
                                 break;
                             // 8. Сохранить данные на диск.
                             case SAVE:
                                 {
+                                    // +++ !!! Выводим сообщение.
                                     Console.WriteLine("\nДанные сохранены.");
 
+                                    //
                                     airport.Save();
                                 }
                                 break;
                         }
                     }
+                    //
                     catch (ArgumentException e)
                     {
                         Console.WriteLine(e.Message);
                     }
+                    //
                     catch (ApplicationException e)
                     {
                         Console.WriteLine(e.Message);
                     }
-                    Console.WriteLine("Нажмите любую клавишу.");
+
+                    // ??? Отличие здесь от того, что в конце "Program".
+
+                    // +++ !!! Выводим сообщение.
+                    Console.WriteLine("\nНажмите любую клавишу.");
+                    // +++ !!! Задержка экрана.
                     Console.ReadKey(true);
+                    // +++ !!! Очистка экрана.
                     Console.Clear();
                 }
             }
 
-            // обрабатывает ошибки загрузки данных
+            // ??? Обрабатывает ошибки загрузки данных.
             catch (DataLoadException e)
             {
                 Console.WriteLine(e.Message, e);
             }
-            // Обрабатывет выход из меню(приложения)
+            // ??? Обрабатывет выход из меню (приложения).
             catch (ApplicationException e)
             {
                 Console.WriteLine(e.Message);
             }
-            // обрабатывает непредвиденные ошибки
+            // ??? Обрабатывает непредвиденные ошибки.
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-
+            // +++ !!! Выводим сообщение.
             Console.WriteLine("\nНажмите любую клавишу...");
+            // +++ !!! Задержка экрана.
             Console.ReadKey(true);
         }
 

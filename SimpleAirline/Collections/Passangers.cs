@@ -1,13 +1,9 @@
 ﻿// ??????????????????????????????????????????????????
-// todo: Нужны ли все библиотеки?
 // todo: var
 // ??????????????????????????????????????????????????
 
 using System;
-//using System.Collections;
 using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
 
 // !!! "Airline" - "Авиакомпания".
 namespace SimpleAirline
@@ -38,7 +34,8 @@ namespace SimpleAirline
             if (_conext.Passangers.ContainsKey(passanger.Passport) ||
                 _conext.PassangersTickets.ContainsKey(passanger.Passport))
             {
-                throw new ArgumentException("Пассажир уже существует", "passanger");
+                //throw new ArgumentException("Пассажир уже существует", "passanger");    // !!! Было.
+                throw new ArgumentException("    Пассажир уже существует.");
             }
 
             _conext.Passangers.Add(passanger.Passport, passanger);
@@ -102,7 +99,7 @@ namespace SimpleAirline
             // назначаем скидку равной стоимости билета (или 100%, но операция вычитание дешевле деления. такая себе микрооптимизация)
             if (ticket.DiscountPrice < 0)
             {
-                ticket.Discount = new Discount(ticket.Price, DiscountType.Static);         ///  !!!!!!!!!!!!!!!!!!!!!!!!!
+                ticket.Discount = new Discount(ticket.Price*0.9, DiscountType.Static);         //  !!!!!!!!!!!!!!!!!!!!!!!!!
             }
 
             // Получаем билеты пассажира
